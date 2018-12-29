@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		localStorage.setItem("courseId",1);
+		var storage=window.localStorage;
+		var courseId=storage.getItem("courseId");
+		var url='/course/'+courseId+'/class';
+		alert(url);
+		
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: true,
+            success: function(data) {
+            	html='';
+            	for(var i=0;i<data.length;i++)
+            		{
+            			var id=data[i]['id'];
+    					var name=data[i]['name'];
+    					var classroom=data[i]['classroom'];
+    					var time=data[i]['time'];
+    					html+=
+    						'<div id="'+id+'"'+'style="background: white;">'+
+    							' <h2 '+
+    								' style="text-align: center; font-size: 70px; margin-top: 2%; padding-top: 2%;">2016-1</h2>'+
+    								' <p style="font-size: 3.1em;">'+
+    									' <span style="margin-left: 15%">讨论课时间：</span> <span'+
+    									' style="margin-left: 7%;">'+time+'</span>'+
+    								' </p>'+
+    								' <p style="font-size: 3.1em;">'+
+    									' <span style="margin-left: 15%">讨论课地点：</span> <span'+
+    									' style="margin-left: 7%;">'+classroom+'</span>'+
+    								' </p>'+
+    								' <p style="font-size: 3.1em;">'+
+    									' <span style="margin-left: 10%">班级学生名单：</span> <a'+
+    									' style="margin-left: 7%; color: rgb(15, 10, 250)">model.xlsx</a>'+
+    								' </p>'+
+    							' <div style="text-align: center; margin-top: 6%;">'+
+    								' <button onclick=deleteClass('+id+')>删除该班级</button>'+
+    							' </div>'+
+    						' </div> ';
+    					$("#classes").append(html);
+            		}
+				
+            },
+            error: function() {
+              alert("获取个人信息失败！");
+            }
+        });
+        
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#NewClass").click(function() {
+			window.location.href = "NewClass.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+	});
+	function deleteClass(id)
+	{
+		   alert("delete!");
+		   $.ajax({
+			url:"/class/"+id,
+			type:"POST",
+			data:{_method:"DELETE"},
+			dataType:"json",
+			success:function(result){
+					alert(result['status']);
+					$("#"+id).remove();
+				},
+	        error: function() {
+	                alert("删除班级失败！");
+	              }
+		   });
+	}
+</script>
+<style type="text/css">
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 33%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+button {
+	font-family: Microsoft YaHei;
+	font-size: 3.1em;
+	margin: 3% 0 7% 0;
+	padding: 1% 2%;
+	border: 0.08em solid;
+	border-color: red;
+	background: white;
+	border-radius: 16px;
+}
+
+#button1 {
+	font-size: 2.9em;
+	font-family: Microsoft YaHei;
+	padding: 1% 2%;
+	background: white;
+	border-radius: 16px;
+	border: 0.06em solid;
+	border-color: rgb(60, 200, 80);
+}
+
+p {
+	max-height: 3.3em;
+}
+
+.add_class {
+	width: 100%;
+	font-family: Microsoft YaHei;
+	text-align: center;
+	color: white;
+	background: rgb(62, 210, 60);
+	padding: 1.5% 0;
+	border-radius: 16px;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<label id="top3">&lt;</label> <label id="top1">班级信息</label> <label
+			id="top2">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="classes">
+		<!--  
+		<div style="background: white;">
+			<h2
+				style="text-align: center; font-size: 70px; margin-top: 2%; padding-top: 2%;">2016-1</h2>
+			<p style="font-size: 3.1em;">
+				<span style="margin-left: 15%">讨论课时间：</span> <span
+					style="margin-left: 7%;">周三 7、8节</span>
+			</p>
+			<p style="font-size: 3.1em;">
+				<span style="margin-left: 15%">讨论课地点：</span> <span
+					style="margin-left: 7%;">海韵教学楼104</span>
+			</p>
+			<p style="font-size: 3.1em;">
+				<span style="margin-left: 10%">班级学生名单：</span> <a
+					style="margin-left: 7%; color: rgb(15, 10, 250)">周三7、8节.xlsx</a>
+			</p>
+			<div style="text-align: center; margin-top: 6%;">
+				<button>删除该班级</button>
+			</div>
+		</div>
+		-->
+	</div>
+	<br>
+	<br>
+	<div class="add_class">
+			<strong style="font-size: 6em; font-style: bold; padding-right: 8%;">+</strong>
+			<span style="font-size: 5em; font-style: bold;" id="NewClass">新增班级</span>
+	</div>
+</body>
+</html>

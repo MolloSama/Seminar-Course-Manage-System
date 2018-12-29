@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+#top2 {
+	position: absolute;
+	left: 34%;
+	font-size: 2em;
+	padding-top: 0.4em;
+}
+
+.mess1{
+margin:0.3em;
+font-size:1.2em;
+}
+.mess2{
+margin:0.1em 20%;
+font-size:1.1em;
+}
+#NewSeminar{
+margin:0.1em 20%;
+font-size:1em;
+font-weight:bold;
+color:white;
+border:none;
+background: rgb(60, 200, 80);
+padding:0.3em 0.6em;
+}
+#change{
+font-size: 1.5em;
+	font-weight: bold;
+	color: white;
+	background: rgb(60, 200, 80);
+	width: 80%;
+	border: 0; 
+	border-radius:0.5em;
+	margin-top:1em;
+	margin-left:10%;
+	padding: 0.2em;
+}
+select{
+color:#00AAAA;
+margin-left:3em;
+padding-right:1em;
+border-radius:0.5em;
+outline:none;
+} 

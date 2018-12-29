@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script src="../js/HeadTeacher.js"></script>
+<script >
+
+$(document).ready(function(){
+	localStorage.setItem("courseId", 1);
+	var storage = window.localStorage;
+	var courseId = storage.getItem("courseId");
+	var url = '/course/' + courseId + '/teamShare';
+	alert(url);
+
+	$.ajax({
+		type : "GET",
+		url : url,
+		//data: "data",
+		dataType : "json",
+		async : true,
+		success : function(data) {
+			html = '';
+			for (var i = 0; i < data.length; i++) {
+				var shareType = "共享组队";
+				var masterCourse = data[i]['mainCourse'];
+				var recieveCourse = data[i]['subCourse'];
+				var masterCourseId = masterCourse['id'];
+				var recieveCourseId = recieveCourse['id'];
+				var masterTeacherName = masterCourse['teacher']['name'];
+				var recieveTeacherName = recieveCourse['teacher']['name'];
+				var masterCourseName = masterCourse['name'];
+				var recieveCourseName = recieveCourse['name'];
+				if (courseId == masterCourseId) {
+					html += '<div id="'+recieveCourseId+'" class="share">'
+					+ ' <p class="courseName" id="'+recieveCourseId+'">'
+					+ recieveCourseName
+					+ '('
+					+ recieveTeacherName
+					+ ')</p>'
+					+ ' <div class="'+recieveCourseId+'">'
+					+ ' <p class="ele">'
+					+ ' <span class="mess1" id="'+shareType+'">共享类型：</span><span>'
+					+ shareType
+					+ '</span>'
+					+ ' </p>'
+					+ ' <p class="ele">'
+					+ ' <span class="mess1">共享情况：</span><span>主课程</span>'
+					+ ' </p>'
+					+ ' <p class="mess2">'
+					+ ' <input type="button" class="cancle" id="'
+					+ recieveCourseId
+					+ '"'
+					+ ' value="取消共享" onclick=deleteShare('
+					+ recieveCourseId+ ',"mainShare")>'
+					+ ' </p>'
+					+ ' </div>' + ' </div>';
+				} else {
+					html += '<div id="'+masterCourseId+'" class="share">'
+					+ ' <p class="courseName" id="'+masterCourseId+'">'
+					+ masterCourseName
+					+ '('
+					+ masterTeacherName
+					+ ')</p>'
+					+ ' <div class="'+masterCourseId+'">'
+					+ ' <p class="ele">'
+					+ ' <span class="mess1">共享类型：</span><span>'
+					+ shareType
+					+ '</span>'
+					+ ' </p>'
+					+ ' <p class="ele">'
+					+ ' <span class="mess1">共享情况：</span><span>从课程</span>'
+					+ ' </p>'
+					+ ' <p class="mess2">'
+					+ ' <input type="button" class="cancle" id="'
+					+ masterCourseId
+					+ '"' 
+					+ ' value="取消共享" onclick=deleteShare('
+					+ masterCourseId
+					+ ')>'
+					+ ' </p>'
+					+ ' </div>'
+					+ ' </div>';
+				}
+			}
+			$("#courses").append(html);
+
+		},
+		error : function() {
+			alert("获取共享信息失败！");
+		}
+	});
+	/*
+						$("#ooad").click(function() {
+							$(".ooad").slideToggle("slow");
+						});
+						$("#j2ee").click(function() {
+							$(".j2ee").slideToggle("slow");
+						});
+	 */
+	$("#NewShare").click(function() {
+		window.location.href = "NewShare.html";
+	});
+});
+
+function deleteShare(passiveCourseId,shareType) {
+	var courseId = localStorage.getItem("courseId");
+	if (confirm("是否取消与该课程的共享")) {
+		alert("delete share!");
+		//url=
+		//alert(url);
+		if(shareType="mainShare")
+		{
+			$.ajax({
+				url : '/course/' + courseId + '/teamMainShare/' + passiveCourseId,
+				type : "POST",
+				data : {
+					_method : "DELETE"
+				},
+				dataType : "json",
+				success : function(result) {
+					alert(result['status']);
+
+					var condition = '[id="' + passiveCourseId
+					+ '"][class="share"]';
+					$(condition).remove();
+
+				},
+				error : function() {
+					alert("取消共享失败！");
+				}
+
+			});
+		}
+	}
+}
+</script>
+
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/Share.css">
+
+
+</head>
+
+<body>
+	<div id=top>
+		<span id="top1">&lt;</span> <span id="top2">共享设置</span> <span
+			id="top3">+</span>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<div id="courses">
+		<!--
+			<div> 
+				<p class="courseName" id="ooad">OOAD(**老师)</p>
+				<div class="ooad">
+					<p class="ele">
+						<span class="mess1">共享类型：</span><span>讨论课共享</span>
+					</p>
+					<p class="ele">
+						<span class="mess1">共享情况：</span><span>主课程</span>
+					</p>
+					<p class="mess2">
+						<input type="button" class="cancle" value="取消共享">
+					</p>
+				</div>
+			</div>
+			-->
+		</div>
+		<div style="height:3em;"></div>
+		<div id="bottomSection">
+			<button id="NewShare">新增共享</button>
+		</div>
+	</div>
+</body>
+</html>

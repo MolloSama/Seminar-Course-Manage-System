@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#PPT").click(function() {
+			window.location.href = "PPT.html";
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+		$("#SeminarIng").click(function() {
+			window.location.href = "Seminar.html";
+		});
+	});
+</script>
+
+<style type="text/css">
+body {
+	background: white;
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 33%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+button {
+	width: 99%;
+	font-size: 4.6em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	border: 0.02em solid;
+	vertical-align: middle;
+	padding: 1.6% 0;
+	border-radius: 26px;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<span id="top3">&lt;</span> <span id="top1">OOAD</span> <span
+			id="top2">+</span>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<div style="padding: 3% 0 5% 5%;">
+			<span id="seminarClass" style="float: right; margin-right: 5%; font-size: 3.3em;">2016-1</span>
+			<p style="font-size: 3.3em; margin-bottom: 0;">
+				<span>主题：</span><span id="topic" style="margin-left: 20%;">业务流程分析</span>
+			</p>
+		</div>
+		<div style="padding: 3% 0 3% 5%; background: rgb(243, 243, 243);">
+			<p style="font-size: 3.3em;">
+				<span>课次序号：</span><span id="order" style="margin-left: 20%;">1</span>
+			</p>
+		</div>
+		<div style="padding: 3% 0 3% 5%;">
+			<span style="font-size: 3.3em;">要求：</span> <br />
+			<textarea id="intro" rows="2" cols="30"
+				style="font-size: 3.3em; border: none; margin-left: 20%;">界面导航图和所有界面原型设计课堂讨论每个小组15分钟</textarea>
+		</div>
+		<div style="padding: 3% 0 3% 5%; background: rgb(243, 243, 243);">
+			<p style="font-size: 3.3em;">
+				<span>课程情况：</span><span id="status" style="margin-left: 20%; color: blue;">正在进行</span>
+			</p>
+		</div>
+		<div
+			style="text-align: center; position: fixed; bottom: 0; width: 100%;">
+			<button
+				style="margin-bottom: 4%; color: white; background: rgb(20, 255, 70);"
+				id="SeminarIng">进入讨论课</button>
+		</div>
+	</div>
+</body>
+</html>

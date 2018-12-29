@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+#top2 {
+	position: absolute;
+	left: 34%;
+	font-size: 2em;
+	padding-top: 0.5em;
+}
+
+.RoundNO {
+	font-size: 1.5em;
+	font-weight: bold;
+	font-family: Microsoft YaHei;
+	color: rgb(60, 200, 80);
+	margin: 2% 0;
+	padding: 0.2em 1em;
+	background: white;
+}
+
+.SeminarRoundSet {
+	margin: 0.02em 0;
+	font-size: 1.3em;
+}
+
+.SetP {
+	width: 1.2em;
+	height: 1.2em;
+	margin-left: 2em;
+	margin-right: 0.15em;
+	vertical-align: middle;
+}
+
+.SeminarAll {
+	display: none;
+}
+
+.Seminar {
+	font-size: 1.3em;
+	margin: 0.3em 0 0.3em 2em;
+}
+
+.ClassAll {
+	display: none;
+}
+
+.Class {
+	margin: 0.2em 0 0.2em 4em;
+	font-size: 1.1em;
+}
+
+#NewSeminar {
+	font-size: 1.5em;
+	font-weight: bold;
+	color: white;
+	background: rgb(60, 200, 80);
+	width: 100%;
+	border: 0;
+	position: fixed;
+	bottom: 0;
+	padding: 0.2em;
+}

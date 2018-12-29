@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/StudentMain.css">
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script type="text/javascript" src="./js/HeadStudent.js"></script>
+<script type="text/JavaScript" src="../js/StudentMain.js">
+	
+</script>
+
+<style type="text/css">
+#top2 {
+	position: absolute;
+	right: 45%;
+	font-size: 2em;
+	padding-top: 4%;
+}
+
+img {
+	width: 1.3em;
+	height: 1.3em;
+	vertical-align: bottom;
+}
+
+.cin {
+	position: absolute;
+	right: 5%;
+	color: rgb(160, 160, 160);
+}
+
+#course,#Personal {
+	background: white;
+	margin-top: 4%;
+	font-size: 1.8em;
+	padding: 0.2em 0.1em;
+}
+#name,#account{
+font-size:1em;
+margin:0 0.6em;
+}
+.userInformation{
+margin-bottom:0;
+margin-top:0.5em;
+padding:0 0.3em;
+}
+</style>
+</head>
+
+<body>
+	<div>
+		<div id=top>
+			<label id="top2">我</label> <label id="top3">+</label>
+			<div class="dropdown-content">
+				<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+			</div>
+		</div>
+		<div id="userInformation">
+			<p class="userInformation">
+				<span id="name"></span> <span id="account"></span>
+			</p>
+		</div>
+		<!-- 用户的姓名以及账户 -->
+		<div id="second_section">
+			<div id="course">
+				<img src="../Picture/2.png"> <span id="MyCourse">我的课程</span> <em
+					class="cin">&gt;</em>
+			</div>
+			<div id="Personal">
+				<img src="../Picture/3.png"> <span>账号与安全</span> <em
+					class="cin">&gt;</em>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script type="text/javascript" src="../js/HeadTeacher.js"></script>
+<!-- <script type="text/javascript" src="../js/CourseMessage.js">-->
+	
+</script>
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/CourseMessage.css">
+<!--  <script>
+	$(document).ready(function() {
+		localStorage.setItem("courseId",1);
+		var storage=window.localStorage;
+		var courseId=storage.getItem("courseId");
+		var url='/course/';
+		url+=courseId;
+		alert(url);
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: true,
+            success: function(data) {
+				var presentationWeight=data['presentationWeight'];
+				var questionWeight=data['questionWeight'];
+				var reportWeight=data['reportWeight'];
+				var minMemberNumber=data['minMemberNumber'];
+				var maxMemberNumber=data['maxMemberNumber'];
+				var startTeamTime=data['startTeamTime'];
+				var endTeamTime=data['endTeamTime'];
+				$("#presentationWeight").text(presentationWeight);
+				$("#questionWeight").text(questionWeight);
+				$("#reportWeight").text(reportWeight);
+				$("#startTeamTime").text(startTeamTime);
+				$("#endTeamTime").text(endTeamTime);
+				var teamCount='';
+				teamCount+=minMemberNumber+'~'+maxMemberNumber;
+				$("#teamCount").text(startTeamTime);
+            },
+            error: function() {
+              alert("获取个人信息失败！");
+            }
+        });
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+	});
+</script>
+-->
+<script >
+$(document).ready(function() {
+	localStorage.setItem("courseId",1);
+	var storage=window.localStorage;
+	var courseId=storage.getItem("courseId");
+	var url='/course/';
+	url+=courseId;
+	alert(url);
+	$.ajax({
+		type: "GET",
+		url: url,
+		//data: "data",
+		dataType: "json",
+		async: false,
+		success: function(data) {
+			var presentationWeight=data['presentationWeight'];
+			var questionWeight=data['questionWeight'];
+			var reportWeight=data['reportWeight'];
+			var minMemberNumber=data['minMemberNumber'];
+			var maxMemberNumber=data['maxMemberNumber'];
+			var startTeamTime=data['startTeamTime'];
+			var endTeamTime=data['endTeamTime'];
+			$("#presentationWeight").text(presentationWeight);
+			$("#questionWeight").text(questionWeight);
+			$("#reportWeight").text(reportWeight);
+			$("#startTeamTime").text(startTeamTime);
+			$("#endTeamTime").text(endTeamTime);
+			var teamCount='';
+			teamCount+=minMemberNumber+'~'+maxMemberNumber;
+			$("#teamCount").text(startTeamTime);
+		},
+		error: function() {
+			alert("获取个人信息失败！");
+		}
+	});
+
+	$(".mess4").click(function() {
+		window.location.href = "TeamRequestShow.html";
+	});
+});
+</script>
+<style type="text/css">
+#top2 {
+	position: absolute;
+	left: 35%;
+	font-size: 1.8em;
+	padding-top: 0.5em;
+}
+
+button {
+	width: 100%;  
+	background: red;
+	color: white;
+	border:none;
+	border-radius: 16px;
+	font-size: 2.2em;
+	padding:0.2em;
+	position:fixed;
+	bottom:0;
+}
+
+.mess1 {
+	font-size: 1.7em;
+	margin: 0;
+	padding: 0.5em;
+}
+
+.mess2 {
+	font-size: 1.5em;
+	text-align: center;
+	margin: 0.3em 0;
+}
+
+.mess3 {
+	float: right;
+	padding-right: 6%;
+}
+
+.mess4 {
+	margin: 0.3em;
+	font-size: 1.7em;
+}
+
+#img1 {
+	width: 1em;
+	height: 1em;
+	vertical-align: bottom;
+	float: right;
+	margin-right: 1em;
+}
+
+.div1, .div2 {
+	background: white;
+	padding: 0.4em 0;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">课程信息</label> <label
+			id="top3">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<div class="div1">
+			<p class="mess1">成绩计算规则</p>
+			<p class="mess2">
+				<span>课堂展示</span> <span id="presentationWeight"></span>
+			</p>
+			<p class="mess2">
+				<span>课堂提问</span><span id="questionWeight"></span>
+			</p>
+			<p class="mess2">
+				<span>书面报告</span><span id="reportWeight"></span>
+			</p>
+		</div>
+		<p class="mess4">
+			组队要求<img src="./Picture/next.png" id="img1" />
+		</p>
+		<div class="div2">
+			<p class="mess1">
+				<span>组队开始时间：</span> <span id="startTeamTime" class="mess3"></span>
+			</p>
+			<p class="mess1">
+				<span>组队截止时间：</span> <span id="endTeamTime" class="mess3"></span>
+			</p>
+		</div>
+		<p>
+			<button>删除该课程</button>
+		</p>
+	</div>
+</body>
+</html>

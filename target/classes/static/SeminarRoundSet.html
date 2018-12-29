@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/SeminarRoundSet.css">
+
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script type="text/javascript" src="./js/HeadTeacher.js"></script>
+<script type="text/javascript" src="./js/SeminarRoundSet.js"></script>
+<style>
+
+</style>
+</head>
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">第一轮</label> <label
+			id="top3">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<div id="seminar">
+			<p class="mess1">讨论课：</p>
+			<div id="SeminarAll">
+				<P class="mess2">业务流程分析</P>
+				<p class="mess2">领域模型设计</p>
+			</div>
+			<button id="NewSeminar">添加讨论课</button>
+		</div>
+		<div id="grade">
+			<p class="mess1">成绩设置：</p>
+			<p class="mess2">
+				展示:<select id="presitation"><option>20%</option>
+					<option>30%</option>
+					<option>50%</option></select>
+			</p>
+			<p class="mess2">
+				提问:<select id="question"><option>20%</option>
+					<option>30%</option>
+					<option>50%</option></select>
+			</p>
+			<p class="mess2">
+				报告:<select id="report"><option>20%</option>
+					<option>30%</option>
+					<option>50%</option></select>
+			</p>
+		</div>
+		<div id="round">
+			<p class="mess1">本轮讨论课报名次数：</p>
+			<p class="mess2">
+				1班:<select id="round_1"><option>1</option>
+					<option>2</option>
+					<option>3</option></select>
+			</p>
+			<p class="mess2">
+				2班:<select id="round_1"><option>1</option>
+					<option>2</option>
+					<option>3</option></select>
+			</p>
+			<p class="mess2">
+				3班:<select id="round_1"><option>1</option>
+					<option>2</option>
+					<option>3</option></select>
+			</p>
+		</div>
+		<button id="change">修改</button>
+	</div>
+</body>
+</html>

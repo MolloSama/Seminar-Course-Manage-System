@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#PPT").click(function() {
+			window.location.href = "PPT.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+	});
+</script>
+
+<style type="text/css">
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 30%;
+	font-size: 4.3em;
+	padding-top: 50px;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+button {
+	width: 99%;
+	font-size: 4.6em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	border: 0.02em solid;
+	vertical-align: middle;
+	padding: 1.6% 0;
+	border-radius: 26px;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<span id="top3">&lt;</span> <span id="top1">OOAD-讨论课</span> <span
+			id="top2">+</span>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<p
+			style="font-size: 3.3em; text-align: center; background: white; margin: 0; padding: 3% 0;">业务流程分析</p>
+		<p style="font-size: 2.8em; margin: 1.5%; padding: 0; color: green;">
+			<span style="margin-right: 10%;">1-3 组展示</span><span
+				style="margin-right: 20%;">已进行5分钟</span><span>提问:&nbsp;&nbsp;1</span>
+		</p>
+		<div style="display: inline;">
+			<div
+				style="width: 20%; background: white; padding-left: 2%; margin: 0; float: left;">
+				<p style="font-size: 3.5em; margin: 0; padding: 5%;">1-1</p>
+				<p style="font-size: 3.5em; margin: 0; padding: 5%;">1-2</p>
+				<p style="font-size: 3.5em; margin: 0; padding: 5%;">1-4</p>
+				<p
+					style="font-size: 3.5em; margin: 0; padding: 5%; color: red; background: rgb(243, 243, 243);">1-3</p>
+				<p style="font-size: 3.5em; margin: 0; padding: 5%;">1-5</p>
+				<p style="font-size: 3.5em; margin: 0; padding: 5%;">2-1</p>
+			</div>
+			<div style="float: left; width: 50%; text-align: center;">
+				<p style="font-size: 4em; text-align: center; margin-left: 10%;">展示分数</p>
+				<input type="text"
+					style="font-size: 6em; width: 40%; height: 13%; text-align: center;" />
+				<button
+					style="margin-bottom: 4%; color: white; background: rgb(20, 255, 70); margin-top: 40%;"
+					id="SeminarIng">抽取提问</button>
+				<button
+					style="color: rgb(20, 255, 70); background: white; margin-top: 10%;"
+					id="ChangeSeminar">下组展示</button>
+			</div>
+			<div
+				style="width: 20%; background: white; padding-left: 2%; margin: 0; float: left;">
+				<p style="font-size: 3.5em; margin: 0; padding: 3%; color: red;">王五</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

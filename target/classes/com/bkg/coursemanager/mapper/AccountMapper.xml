@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bkg.coursemanager.mapper.AccountMapper" >
+    <resultMap id="account" type="com.bkg.coursemanager.entity.Account" >
+        <result column="accountID" property="accountID" />
+        <result column="email" property="email" />
+        <result column="status" property="status" />
+        <result column="timeInterval" property="timeInterval" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="role" property="role" />
+    </resultMap>
+
+    <select id="getAccountByID" resultMap="account" parameterType="java.lang.String">
+            select email,status,timeInterval,code,name,role from account
+            where accountID= #{accountID,jdbcType=VARCHAR}
+    </select>
+</mapper>

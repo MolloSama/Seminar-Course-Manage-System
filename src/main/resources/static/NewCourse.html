@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script type="text/javascript" src="../js/HeadTeacher.js"></script>
+<script >
+/**
+ * 
+ */
+$(document).ready(function() {
+	localStorage.setItem("userId",1);
+	$("#sure").click(function() {
+		var startTeamTime = '';
+		var endTeamTime = '';
+		startTeamTime += $(
+		"#startTeamTimeYear").val();
+		
+		endTeamTime += $("#endTeamTimeYear")
+		.val();
+		$
+		.ajax({
+			type : "POST",
+			url : '/course',
+			contentType : "application/json; charset=utf-8",
+			data : JSON
+			.stringify(GetJsonData(
+					startTeamTime,
+					endTeamTime)),
+					dataType : "json",
+					success : function(
+							message) {
+						alert(message['status']);
+					},
+					error : function(
+							message) {
+						alert("新建课程失败！");
+					}
+		});
+	});
+
+	function GetJsonData(startTeamTime, endTeamTime) {
+		var userId=localStorage.getItem("userId")
+		var json = {
+				"teacher" : 
+					{
+						'id' :userId
+					},
+				"name" : $("#name").val(),
+				"intro" : $("#intro").val(),
+				"presentationWeight" : $("#presentationWeight")
+				.val(),
+				"questionWeight" : $("#questionWeight").val(),
+				"reportWeight" : $("#reportWeight").val(),
+				"startTeamTime" : startTeamTime,
+				"endTeamTime" : endTeamTime
+		};
+		alert(JSON.stringify(json));
+		return json;
+	}
+
+	$(".mess4").click(function() {
+		window.location.href = "TeamRequestSet.html";
+	});
+
+});
+</script>
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/NewCourse.css">
+
+</head>
+
+<body>
+	<div id=top>
+		<span id="top1">&lt;</span> <span id="top2">新建课程</span> <span
+			id="top3">+</span>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div>
+		<input id="name" type="text" placeholder="课程名称" />
+		<textarea id="intro" rows="4" cols="25" placeholder="课程要求"></textarea>
+		<div class="div1">
+			<p class="mess1">
+				<span>成绩计算规则</span>
+			</p>
+			<p class="p1">
+				<span class="mess2">课堂展示：</span> <select id="presentationWeight">
+					<option>0.4</option>
+					<option>0.5</option>
+				</select>
+			</p>
+			<p class="p1">
+				<span class="mess2">课堂提问：</span> <select id="questionWeight">
+					<option>0.4</option>
+					<option>0.5</option>
+				</select>
+			</p>
+			<p class="p1">
+				<span class="mess2">书面报告：</span> <select id="reportWeight">
+					<option>0.4</option>
+					<option>0.5</option>
+				</select>
+			</p>
+		</div>
+		<p class="mess4">组队要求<img src="./Picture/next.png" id="img1"/></p>
+		<div class="Time">
+			<p class="ele">
+				<label class="mess3">组队开始时间：</label> 
+				<input id="startTeamTimeYear" type="date" class="timeInput"/>
+			</p>
+			<p class="ele">
+				<label class="mess3">组队截止时间：</label> 
+				<input id="endTeamTimeYear" type="date" class="timeInput"/>
+			</p>
+		</div>
+		<div class="div2">
+			<button id="sure">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
+		</div>
+	</div>
+</body>
+</html>

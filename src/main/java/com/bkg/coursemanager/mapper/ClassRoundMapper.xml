@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bkg.coursemanager.mapper.ClassRoundMapper">
+    <resultMap id="ClassRound" type="com.bkg.coursemanager.entity.ClassRound">
+        <result column="enroll_number" property="enrollNumber" />
+        <result column="klass_id" property="class1.id" />
+        <association property="round" column="round_id"                       
+            select="com.bkg.coursemanager.mapper.RoundMapper.getRoundById" />
+    </resultMap>
+    
+    <select id="getClassRoundById" resultMap="ClassRound">
+    	select klass_round.* from klass_round where id= #{id}
+    </select>
+</mapper>

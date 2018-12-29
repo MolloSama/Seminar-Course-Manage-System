@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bkg.coursemanager.mapper.TeamMapper" >
+	<resultMap id="Student" type="com.bkg.coursemanager.entity.User" >
+	    <result column="id" property="id"/>
+	 	<result column="account" property="account"/>
+	 	<result column="is_active" property="isActive"/>
+	 	<result column="student_name" property="name"/>
+	 	<result column="email" property="email"/>
+    </resultMap>
+    
+    <resultMap id="Team" type="com.bkg.coursemanager.entity.Team" >
+        <result column="id" property="id" />
+        <result column="team_name" property="name" />
+        <result column="status" property="status" />
+        <result column="team_serial" property="serial" />
+        <association property="class1" column="klass_id"                       
+            select="com.bkg.coursemanager.mapper.ClassMapper.selectClassByClassId" />
+        <association property="course" column="course_id"                       
+            select="com.bkg.coursemanager.mapper.CourseMapper.getCourseByCourseId" />
+		<association property="leader" column="leader_id"                       
+            select="com.bkg.coursemanager.mapper.UserMapper.getStudentById" />
+    </resultMap>
+
+	<resultMap id="TeamValidRequest" type="com.bkg.coursemanager.entity.TeamValidRequest" >
+	    <result column="id" property="id"/>
+	 	<result column="reason" property="reason"/>
+	 	<result column="status" property="status"/>
+	 	<result column="teacher_id" property="teacher.id"/>
+	 	<association property="team" column="team_id"                       
+            select="com.bkg.coursemanager.mapper.TeamMapper.getTeamByTeamId" />
+    </resultMap> 
+
+    <select id="getMembersByTeamIdAndCourseIdAndLeaderId" resultMap="Student">
+            select student.* from klass_student,student
+            where klass_student.team_id= #{teamId}
+            AND klass_student.course_id= #{courseId}
+            AND klass_student.student_id!= #{leaderId}
+            AND klass_student.student_id=student.id
+    </select>
+    <select id="getTeamByTeamId" resultMap="Team">
+            select team.* from team where id= #{teamId} 
+    </select>
+    
+    <select id="getTeamByClassId" resultMap="Team">
+            select team.* from team where klass_id= #{classId} 
+    </select>
+    <select id="getAllTeamByCourseId" resultMap="Team">
+            select team.* from team 
+            where course_id= #{courseId}
+    </select>
+    <select id="getTeamValidRequestById" resultMap="TeamValidRequest">
+            select team_valid_application.* from team_valid_application 
+            where id= #{teamValidRequestId}
+    </select>
+    
+    
+    <insert id="addTeam" parameterType="com.bkg.coursemanager.entity.Team" useGeneratedKeys="true" keyProperty="id">
+            insert into team(team_name,status,team_serial,course_id,leader_id,klass_id)
+            values(#{name},#{status},#{serial},#{course.id},#{leader.id},#{class1.id})
+    </insert>
+    
+    
+    <insert id="addTeamValidRequest" parameterType="com.bkg.coursemanager.entity.TeamValidRequest" useGeneratedKeys="true" keyProperty="id">
+            insert into team_valid_application(team_id,teacher_id,reason,status)
+            values(#{team.id},#{team.course.teacher.id},#{reason},#{status})
+    </insert>
+    
+    <insert id="addClassStudent">
+            insert into klass_student(klass_id,student_id,course_id,team_id)
+            values(#{classId},#{studentId},#{courseId},#{teamId})
+    </insert>
+    
+    <update id="updateTeamByTeamId" parameterType="com.bkg.coursemanager.entity.Team">
+			update team
+			<set>
+            	<if test="name != null">
+                	team_name = #{name},
+            	</if>
+            	<if test="status != null">
+                	status = #{status}
+            	</if>
+        	</set>
+			where id= #{id}
+    </update>
+    
+    <update id="addTeamMember">
+			update klass_student
+			set team_id= #{teamId}
+			where student_id= #{memberId} 
+			AND course_id= #{courseId}
+    </update>
+    
+    <update id="updateTeamValidRequest" parameterType="com.bkg.coursemanager.entity.TeamValidRequest" useGeneratedKeys="true" keyProperty="id">
+			update team_valid_application
+			<set>
+            	<if test="reason != null">
+                	reason = #{reason}
+            	</if>
+            	<if test="status != null">
+                	status = #{status}
+            	</if>
+        	</set>
+			where id= #{id}
+    </update>
+    
+    <update id="teamShare">
+			update klass_student t_sub,klass_student t_main
+			set t_sub.team_id=t_main.team_id
+			where t_sub.student_id=t_main.student_id
+			AND t_sub.course_id= #{subCourseId}
+			AND t_main.course_id= #{mainCourseId}
+    </update>
+    
+    <update id="updateClassStudentTeamIdByCourseIdAndStudentId">
+			update klass_student
+			set team_id= #{teamId}
+			where course_id= #{courseId} 
+			AND student_id= #{studentId}
+    </update>
+    
+    <update id="updateClassStudentTeamIdByTeamId">
+			update klass_student
+			set team_id= #{newTeamId}
+			where team_id= #{oldTeamId}
+    </update>
+    <update id="deleteClassTeamByCourseId">
+    		update klass_student
+			set team_id= 0
+			where course_id= #{courseId}
+    </update>
+    
+    <delete id="deleteTeamByTeamId">
+			delete from team
+			where id= #{teamId}
+    </delete>
+    
+
+    
+</mapper>

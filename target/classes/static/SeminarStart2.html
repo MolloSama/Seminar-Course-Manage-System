@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Seminar1.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#a2").click(function() {
+			window.location.href = "StudentMain.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#Look").click(function() {
+			window.location.href = "SeminarNoStart1-3.html";
+		});
+		$("#sub1").click(function() {
+
+		});
+		$("#sub2").click(function() {
+
+		});
+		$("#sub3").click(function() {
+
+		});
+		$("#top1").click(function() {
+			window.history.back();
+		});
+		$("#top3").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+
+	});
+</script>
+
+<style type="text/css">
+html, body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 4.2em;
+}
+
+#top2 {
+	position: absolute;
+	left: 27%;
+	font-size: 2em;;
+	padding-top: 4%;
+	padding-bottom: 40px;
+}
+
+#top1 {
+	position: absolute;
+	left: 5%;
+	font-size: 2.2em;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	right: 5%;
+	font-size: 2.2em;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: -0.1em 0.2em 0.8em 0 rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 1.2em;
+	font-family: Microsoft YaHei;
+	padding: 0.4em 0.7em;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+.Mess {
+	font-size: 1.2em;
+	padding: 0.7em 0.4em;
+	margin: 0.2em 0;
+}
+
+.answ {
+	color: rgb(60, 200, 80);
+	position: absolute;
+	left: 40%;
+}
+
+.time {
+	color: red;
+	position: absolute;
+	left: 40%;
+}
+
+textarea {
+	margin: 0;
+	font-size: 1.3em;
+	border: none;
+	background: rgb(243, 243, 243);
+}
+
+#sub1 {
+	width: 100%;
+	font-size: 1.6em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: white;
+	border: 0.02em solid;
+	background: rgb(20, 255, 70);
+	vertical-align: middle;
+	padding: 0.2 0;
+	border-radius: 0.5em;
+	margin-top: 1em;
+}
+
+#sub2 {
+	width: 40%;
+	font-size: 1.2em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: rgb(20, 255, 70);
+	border: 0.02em solid;
+	background: white;
+	vertical-align: middle;
+	padding: 0.2 0;
+	border-radius: 0.5em;
+	margin-top: 0.5em;
+	margin-right: 15%;
+}
+
+#sub3 {
+	width: 40%;
+	font-size: 1.2em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: white;
+	border: 0.02em solid;
+	background: rgb(20, 255, 70);
+	vertical-align: middle;
+	padding: 0.2 0;
+	border-radius: 0.5em;
+	margin-top: 0.5em;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">讨论课轮次</label> <label
+			id="top3">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="secondSection">
+		<p class="Mess" style="background: white;">
+			<span class="promopt">轮次：</span> <label class="answ">第一轮</label>
+		</p>
+		<p class="Mess">
+			<span class="promopt">主题：</span> <label class="answ">用例分析</label>
+		</p>
+		<p class="Mess" style="background: white;">
+			<span class="promopt">课次序号：</span> <label class="answ">第2次</label>
+		</p>
+		<span class="promopt" style="vertical-align: top; font-size: 1.2em;">要求：</span>
+		<textarea rows="3" cols="30" readonly="readonly">包括分辨Actors、Use Cases划分和撰写用例
+课堂讨论每个小组15分钟，10分钟发言，5分钟讨论</textarea>
+		<p class="Mess" style="background: white;">
+			<span class="promopt">课次情况：</span> <label class="answ">已开始</label> <span
+				style="position: absolute; left: 70%; font-size: 0.5em; vertical-align: bottom;"
+				id="Look">查看信息</span>
+		</p>
+		<p class="Mess">
+			<span class="promopt">PPT：</span> <label class="answ">已上传</label>
+		</p>
+		<p class="Mess" style="background: white;">
+			<span class="promopt">书面报告：</span> <label class="answ">未上传</label>
+		</p>
+	</div>
+	<button id="sub1">进入讨论课</button>
+	<button id="sub2">上传PPT</button>
+	<button id="sub3">上传书面报告</button>
+</body>
+</html>

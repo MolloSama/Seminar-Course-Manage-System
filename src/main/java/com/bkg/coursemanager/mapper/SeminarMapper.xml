@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bkg.coursemanager.mapper.SeminarMapper">
+    <resultMap id="seminarMap" type="com.bkg.coursemanager.entity.Seminar">
+        <result column="id" property="id" />
+        <result column="seminar_name" property="topic" />
+        <result column="introduction" property="intro" />
+        <result column="seminar_serial" property="order" />
+        <result column="max_team" property="teamNumLimit" />
+        <result column="enroll_start_time" property="signupStartTime" />
+        <result column="enroll_end_time" property="signupEndTime" />
+        <result column="round_id" property="round.id" />
+    </resultMap>
+    
+    <resultMap id="ClassSeminarMap" type="com.bkg.coursemanager.entity.ClassSeminar">
+        <id column="id" property="id" />
+        <result column="report_ddl" property="reportDDL" />
+        <result column="status" property="status" />
+		<association property="seminar" column="seminar_id"                       
+            select="com.bkg.coursemanager.mapper.SeminarMapper.searchSeminarById" />
+        <association property="class1" column="klass_id"                       
+            select="com.bkg.coursemanager.mapper.ClassMapper.selectClassByClassId" />
+    </resultMap>
+
+    <resultMap id="seminarClassMap" type="com.bkg.coursemanager.entity.Class">
+        <id column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="klass_serial" property="serial" />
+    </resultMap>
+
+    <resultMap id="seminarScoreMap" type="com.bkg.coursemanager.entity.SeminarScore">
+        <id column="klass_seminar_id" property="id" />
+        <result column="presentation_score" property="presentationScore" />
+        <result column="report_score" property="reportScore" />
+        <result column="question_score" property="questionScore" />
+
+        <association property="team" javaType="com.bkg.coursemanager.entity.Team">
+            <result column="id"  property="id" />
+            <result column="team_name"  property="name" />
+        </association>
+    </resultMap>
+
+	<resultMap id="SeminarScore" type="com.bkg.coursemanager.entity.SeminarScore">
+        <result column="presentation_score" property="presentationScore" />
+        <result column="report_score" property="reportScore" />
+        <result column="question_score" property="questionScore" />
+        <result column="total_score" property="totalScore" />
+        <result column="team_id" property="team.id" />
+        <result column="klass_seminar_id" property="classSeminar.id" />
+    </resultMap>
+
+    <insert id="createSeminar" parameterType="com.bkg.coursemanager.entity.Seminar" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO seminar(seminar_name,introduction,seminar_serial,round_id,is_visible,max_team,enroll_start_time,enroll_end_time,course_id)
+        VALUES (#{topic},#{intro},#{order},#{round.id},#{visible},#{teamNumLimit},#{signupStartTime},
+        #{signupEndTime},#{course.id});
+    </insert>
+
+    <select id="getClassBySeminarId" resultType="com.bkg.coursemanager.entity.Seminar" resultMap="seminarClassMap">
+        SELECT a.grade,a.klass_serial FROM klass a,klass_seminar b
+        WHERE  a.id=b.klass_id AND b.id= #{seminarId};
+    </select>
+
+    <update id="modifySeminarById">
+        UPDATE seminar
+        SET id = #{seminar.id},
+            seminar_name = #{seminar.topic},
+            introduction = #{seminar.intro},
+            seminar_serial = #{seminar.order},
+            is_visible = #{seminar.visible},
+            round_id = #{seminar.round.id},
+            enroll_start_time = #{seminar.signupStartTime},
+            enroll_end_time = #{seminar.signupEndTime},
+            max_team = #{seminar.teamNumLimit}
+        WHERE id = #{seminarId};
+
+        UPDATE klass_seminar
+        SET report_ddl = #{seminar.reportDDL} WHERE seminar_id = #{seminarId};
+    </update>
+
+    <delete id="deleteSeminar">
+        DELETE FROM seminar WHERE id= #{seminarId};
+    </delete>
+
+    <select id="searchSeminarById" resultType="com.bkg.coursemanager.entity.Seminar" resultMap="seminarMap">
+        SELECT seminar.* FROM seminar WHERE id = #{seminarId};
+    </select>
+
+    <update id="modifyClassSeminarById">
+        UPDATE klass_seminar
+        SET report_ddl = #{classSeminar.reportDDL}
+        WHERE klass_id = #{classId} AND seminar_id = #{seminarId};
+    </update>
+
+    <update id="modifySeminarRound">
+        UPDATE seminar SET round_id = #{round.id} WHERE id = #{seminarId};
+    </update>
+
+    <update id="modifySeminarStatus">
+        UPDATE klass_seminar SET status = #{classSeminar.status}
+        WHERE seminar_id = #{seminarId} AND klass_id = #{classSeminar.class1.id};
+    </update>
+
+    <select id="getSeminarScoreById" resultMap="seminarScoreMap">
+        SELECT a.id,a.team_name,b.presentation_score,b.report_score,b.question_score
+        FROM team a,seminar_score b, klass_seminar c
+        WHERE b.klass_seminar_id = c.id AND c.seminar_id = #{seminarId} AND a.id = #{teamId} AND b.team_id = #{teamId};
+    </select>
+    
+    <select id="getSeminarScoreByClassSeminarIdAndTeamId">
+    	SELECT seminar_score.* FROM seminar_score
+    	WHERE klass_seminar_id= #{classSeminarId}
+    	AND team_id= #{teamId}
+    </select>
+    
+    <select id="getClassSeminarBySeminarIdAndClassId" resultMap="ClassSeminarMap">
+        SELECT klass_seminar.* FROM klass_seminar
+        WHERE seminar_id= #{seminarId} AND klass_id= #{classId};
+    </select>
+    
+    <select id="getSeminarScoreByTeamIdAndClassSeminarId" resultMap="SeminarScore">
+        SELECT seminar_score.* FROM seminar_score
+        WHERE team_id= #{teamId} AND klass_seminar_id= #{classSeminarId};
+    </select>
+
+    <update id="modifySeminarScoreById">
+        UPDATE seminar_score SET presentation_score = #{seminarScore.presentationScore},
+                                 report_score = #{seminarScore.reportScore},
+                                 question_score = #{seminarScore.questionScore}
+        WHERE klass_seminar_id = #{seminarId} AND team_id = #{teamId};
+    </update>
+
+    <select id="getAllSeminarScoreById" resultMap="seminarScoreMap">
+        SELECT a.id,a.team_name,b.presentation_score,b.report_score,b.question_score
+        FROM team a,seminar_score b, klass_seminar c
+        WHERE b.klass_seminar_id = c.id AND c.seminar_id = #{seminarId};
+    </select>
+
+
+
+
+</mapper>

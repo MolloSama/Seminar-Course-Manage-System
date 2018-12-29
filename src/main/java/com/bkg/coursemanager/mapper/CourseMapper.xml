@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bkg.coursemanager.mapper.CourseMapper" >
+	<resultMap id="Team" type="com.bkg.coursemanager.entity.Team" >
+        <result column="id" property="id" />
+        <result column="team_name" property="name" />
+        <result column="status" property="status" />
+        <result column="team_serial" property="serial" />
+        <result property="course.id" column="course_id"/>
+        <association property="class1" column="klass_id"                       
+            select="com.bkg.coursemanager.mapper.ClassMapper.selectClassByClassId" />
+		<association property="leader" column="leader_id"                       
+            select="com.bkg.coursemanager.mapper.UserMapper.getStudentById" />
+    </resultMap>
+    
+	<resultMap id="Student" type="com.bkg.coursemanager.entity.User" >
+	    <result column="id" property="id"/>
+	 	<result column="account" property="account"/>
+	 	<result column="is_active" property="isActive"/>
+	 	<result column="student_name" property="name"/>
+	 	<result column="email" property="email"/>
+    </resultMap>
+    
+    <resultMap id="Teachrer" type="com.bkg.coursemanager.entity.User" >
+	    <result column="id" property="id"/>
+	 	<result column="account" property="account"/>
+	 	<result column="is_active" property="isActive"/>
+	 	<result column="teacher_name" property="name"/>
+	 	<result column="email" property="email"/>
+    </resultMap>
+    
+    <resultMap id="Class" type="com.bkg.coursemanager.entity.Class" >
+        <result column="id" property="id" />
+        <result column="grade" property="grade" />
+        <result column="klass_serial" property="serial" />
+        <result column="klass_time" property="time" />
+        <result column="klass_location" property="classroom" />
+        <result column="course_id" property="course.id" />
+    </resultMap>
+    
+    <resultMap id="Course" type="com.bkg.coursemanager.entity.Course" >
+        <result column="id" property="id" />
+        <result column="course_name" property="name" />
+        <result column="introduction" property="intro" />
+        <result column="presentation_percentage" property="presentationWeight" />
+        <result column="question_percentage" property="questionWeight" />
+        <result column="report_percentage" property="reportWeight" />
+        <result column="team_start_time" property="startTeamTime" />
+        <result column="team_end_time" property="endTeamTime" />
+        <association property="teacher" column="teacher_id"                       
+            select="com.bkg.coursemanager.mapper.UserMapper.getTeacherById" />
+       	<association property="teamMainCourse" column="team_main_course_id"                       
+            select="com.bkg.coursemanager.mapper.CourseMapper.getCourseByCourseId" />
+        <association property="seminarMainCourse" column="seminar_main_course_id"                       
+            select="com.bkg.coursemanager.mapper.CourseMapper.getCourseByCourseId" />
+    </resultMap>
+    
+   	<resultMap id="Round" type="com.bkg.coursemanager.entity.Round" >
+	    <result column="id" property="id"/>
+	    <result column="round_serial" property="order"/>
+	 	<result column="presentation_score_method" property="calculatePreType"/>
+	 	<result column="report_score_method" property="calculateRepType"/>
+	 	<result column="question_score_method" property="calculateQueType"/>
+	 	<result column="course_id" property="course.id"/>
+    </resultMap>
+    
+    <resultMap id="TeamShareRequest" type="com.bkg.coursemanager.entity.TeamShareRequest" >
+        <result column="id" property="id" />
+        <result column="status" property="status" />
+        <result column="main_course_id" property="mainCourse.id" />
+        <result column="sub_course_id" property="subCourse.id" />
+        <result column="sub_course_teacher_id" property="subCourse.teacher.id" />
+    </resultMap>
+
+    <resultMap id="SeminarShareRequest" type="com.bkg.coursemanager.entity.SeminarShareRequest" >
+        <result column="id" property="id" />
+        <result column="status" property="status" />
+        <result column="main_course_id" property="mainCourse.id" />
+        <result column="sub_course_id" property="subCourse.id" />
+        <result column="sub_course_teacher_id" property="subCourse.teacher.id" />
+    </resultMap>
+    
+    <resultMap id="TeamValidRequest" type="com.bkg.coursemanager.entity.TeamValidRequest" >
+	    <result column="id" property="id"/>
+	 	<result column="reason" property="reason"/>
+	 	<result column="status" property="status"/>
+	 	<result column="teacher_id" property="teacher.id"/>
+	 	<association property="team" column="team_id"                       
+            select="com.bkg.coursemanager.mapper.TeamMapper.getTeamByTeamId" />
+    </resultMap> 
+    
+    <resultMap id="Seminar" type="com.bkg.coursemanager.entity.Seminar">
+        <result column="id" property="id" />
+        <result column="seminar_name" property="topic" />
+        <result column="introduction" property="intro" />
+        <result column="seminar_serial" property="order" />
+        <result column="max_team" property="teamNumLimit" />
+        <result column="enroll_start_time" property="signupStartTime" />
+        <result column="enroll_end_time" property="signupEndTime" />
+        <result column="round_id" property="round.id" />
+    </resultMap>
+	
+	<!--  
+	boolean isShareTeam;
+	boolean isShareSeminar;
+	int roundNumber;
+	int minMemberNumber;
+	int maxMemberNumber;
+	-->
+	<select id="getAllCourse" resultMap="Course">
+            select course.* from course
+    </select>
+    
+    <select id="getCourseByCourseId" resultMap="Course">
+			select course.* from course where id= #{courseId}
+    </select>
+    
+    <select id="getClassByCourseId" resultMap="Class">
+            select klass.* from klass where course_id= #{courseId}
+    </select>
+    
+    <select id="getRoundByCourseId" resultMap="Round">
+            select round.* from round where course_id= #{courseId}
+    </select>
+    
+	<select id="getStudentCourseByCourseId" resultMap="Course">
+            select course.* from course,klass_student 
+            where course.id= #{courseId} 
+            AND klass_student.student_id= #{userId} 
+            AND klass_student.course_id=course.id
+    </select>
+     
+    <select id="getTeacherCourseByCourseId" resultMap="Course">
+            select course.* from course 
+            where course.teacher_id= #{userId}
+    </select>
+    
+    <select id="getAllTeamByCourseId" resultMap="Team">
+            select team.* from team 
+            where course_id= #{courseId}
+    </select>
+    
+    <select id="getMyTeamByUserId" resultMap="Team">
+            select team.* from team,klass_student
+            where klass_student.course_id= #{courseId} 
+            AND klass_student.student_id= #{userId}
+            AND team.id=klass_student.team_id
+    </select>
+    
+    <select id="getNoTeamByCourseId" resultMap="Student">
+            select student.* from klass_student,student 
+            where klass_student.course_id= #{courseId}
+            AND klass_student.team_id=0
+            AND klass_student.student_id=student.id
+    </select>
+    
+    <select id="getSubTeamShareCourseByCourseId" resultMap="Course">
+            select course.* from course 
+            where team_main_course_id= #{courseId}
+    </select>
+    
+    <select id="getSubSeminarShareCourseByCourseId" resultMap="Course">
+            select course.* from course 
+            where seminar_main_course_id= #{courseId}
+    </select>
+    
+    <select id="getTeamValidRequestByCourseId" resultMap="TeamValidRequest">
+            select team_valid_application.* from team,team_valid_application
+            where team.course_id= #{courseId}
+            AND team.id=team_valid_application.team_id
+    </select>
+    
+    <select id="getStudentCourseByStudentId" resultMap="Course">
+    		select course.*
+    		from course,klass_student
+    		where klass_student.course_id=course.id
+    		AND klass_student.student_id= #{studentId}
+    </select>
+    <select id="getStudentClassByCourseIdAndStudentId" resultMap="Class">
+    		select klass.*
+    		from klass,klass_student
+    		where klass_student.course_id= #{courseId}
+    		AND student_id= #{studentId}
+    		AND klass_student.klass_id=klass.id
+    </select>
+    
+    <select id="getSeminarByCourseId" resultMap="Seminar">
+    		select seminar.*
+    		from seminar
+    		where course_id= #{courseId}
+    </select>
+    
+    <insert id="addClass" parameterType="com.bkg.coursemanager.entity.Class" useGeneratedKeys="true" keyProperty="id">
+            insert into klass(course_id,grade,klass_serial,klass_time,klass_location)
+            values(#{course.id},#{grade},#{serial},#{time},#{classroom})
+    </insert>
+
+    <insert id="addCourse" parameterType="com.bkg.coursemanager.entity.Course" useGeneratedKeys="true" keyProperty="id">
+            insert into course(teacher_id,course_name,introduction,presentation_percentage,question_percentage,report_percentage,team_start_time,team_end_time
+            <if test="teamMainCourse != null">,team_main_course_id</if>
+            <if test="seminarMainCourse != null">,seminar_main_course_id</if>
+            )
+            values(#{teacher.id},#{name},#{intro},#{presentationWeight},#{questionWeight},#{reportWeight},#{startTeamTime},#{endTeamTime}
+            <if test="teamMainCourse != null">,#{teamMainCourse.id}</if>
+            <if test="seminarMainCourse != null">,#{seminarMainCourse.id}</if>
+            )
+    </insert>
+    
+    <insert id="addTeamShareRequest" parameterType="com.bkg.coursemanager.entity.TeamShareRequest" useGeneratedKeys="true" keyProperty="id">
+            insert into share_team_application(main_course_id,sub_course_id,sub_course_teacher_id,status)
+            values(#{mainCourse.id},#{subCourse.id},#{subCourse.teacher.id},#{status})    
+    </insert>
+    
+   	<insert id="addSeminarShareRequest" parameterType="com.bkg.coursemanager.entity.SeminarShareRequest" useGeneratedKeys="true" keyProperty="id">
+            insert into share_seminar_application(main_course_id,sub_course_id,sub_course_teacher_id,status)
+            values(#{mainCourse.id},#{subCourse.id},#{subCourse.teacher.id},#{status})    
+    </insert>
+    
+    <update id="updateMainCourseByCourseId" parameterType="com.bkg.coursemanager.entity.Course">
+		    UPDATE course
+        	<set>
+            	<if test="seminarMainCourse != null">
+                	seminar_main_course_id = #{seminarMainCourse.id}
+            	</if>
+            	<if test="teamMainCourse != null">
+                	team_main_course_id = #{teamMainCourse.id}
+            	</if>
+        	</set>
+        	WHERE id= #{id}
+    </update>
+    
+    <!-- 
+    <update id="deleteCourseMainCourseByMainCourseId" parameterType="com.bkg.coursemanager.entity.Course">
+		    UPDATE course
+        	<set>
+            	<if test="seminar_main_course_id != null">
+                	seminar_main_course_id =0
+            	</if>
+            	<if test="team_main_course_id != null">
+                	team_main_course_id =0
+            	</if>
+        	</set>
+        	<where>
+				<if test="seminar_main_course_id != null">
+　　　　　　			seminar_main_course_id = #{sminarMainCourseId}
+				</if>
+				<if test="team_main_course_id != null">
+　　　　　　			team_main_course_id = #{teamMainCourseId}
+				</if>
+			</where>
+    </update>
+     -->
+    
+    <delete id="deleteCourseByCourseId">
+			delete from course where id= #{courseId}
+    </delete>
+</mapper>

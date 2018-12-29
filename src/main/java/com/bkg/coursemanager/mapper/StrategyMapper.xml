@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bkg.coursemanager.mapper.StrategyMapper">
+
+    <select id="getTeamStrategySerial" resultType="java.lang.Integer">
+        SELECT strategy_serial
+        FROM team_strategy
+        WHERE course_id = #{courseId};
+    </select>
+
+    <select id="getTeamStrategyIdSerial2" resultType="java.lang.Integer">
+        SELECT strategy_id FROM team_strategy
+        WHERE course_id = #{courseId} AND strategy_name = 'ConflictCourseStrategy' AND strategy_serial = #{serial};
+    </select>
+
+    <select id="getTeamStrategyIdSerial1" resultType="java.lang.Integer">
+        SELECT strategy_id FROM team_strategy
+        WHERE course_id = #{courseId} AND strategy_name = 'TeamAndStrategy';
+    </select>
+
+    <select id="getConflictCourseId" resultType="java.lang.Integer">
+        SELECT course_id FROM conflict_course_strategy
+        WHERE id = #{strategyId};
+    </select>
+
+    <select id="getAndStrategyName" resultType="java.lang.String">
+        SELECT strategy_name FROM team_and_strategy
+        WHERE id = #{strategyId};
+    </select>
+
+    <select id="getAndStrategyId" resultType="java.lang.Integer">
+        SELECT strategy_id FROM team_and_strategy
+        WHERE strategy_name = #{strategyName} AND id = #{strategyId};
+    </select>
+
+    <select id="getMinMember" resultType="java.lang.Integer">
+        SELECT min_member FROM member_limit_strategy
+        WHERE id = #{memberLimitId};
+    </select>
+
+    <select id="getMaxMember" resultType="java.lang.Integer">
+        SELECT max_member FROM member_limit_strategy
+        WHERE id = #{memberLimitId};
+    </select>
+
+    <select id="getCourseMemberLimitId" resultType="java.lang.Integer">
+        SELECT strategy_id FROM team_or_strategy
+        WHERE id = #{orStrategyId};
+    </select>
+
+    <select id="getMinCourseMember" resultType="java.lang.Integer">
+        SELECT min_member FROM course_member_limit_strategy
+        WHERE id = #{courseMemberLimitId};
+    </select>
+
+    <select id="getMaxCourseMember" resultType="java.lang.Integer">
+        SELECT max_member FROM course_member_limit_strategy
+        WHERE id = #{courseMemberLimitId};
+    </select>
+
+    <select id="getCourseIdByCourseMemberLimitId" resultType="java.lang.Integer">
+        SELECT course_id FROM course_member_limit_strategy
+        WHERE id = #{courseMemberLimitId};
+    </select>
+
+    <select id="checkCourseMember" resultType="java.lang.Integer">
+        SELECT count(*) FROM klass_student
+        WHERE course_id = #{courseId} AND student_id = #{studentId};
+    </select>
+
+    <select id="getClassIdByStudentId" resultType="java.lang.Integer">
+        SELECT klass_id FROM klass_student
+        WHERE student_id = #{studentId};
+    </select>
+
+    <select id="getCourseIdByStudentId" resultType="java.lang.Integer">
+        SELECT course_id FROM klass_student
+        WHERE student_id = #{studentId};
+    </select>
+
+    <insert id="addFirstConflictStrategy" parameterType="com.bkg.coursemanager.entity.strategy.ConflictCourseStrategy" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO conflict_course_strategy(course_id)
+        VALUES (#{courseId});
+    </insert>
+
+    <insert id="addConflictStrategy">
+        INSERT INTO conflict_course_strategy(id,course_id)
+        VALUES (#{id},#{courseId});
+    </insert>
+
+    <insert id="addConflictStrategyIntoTeam">
+        INSERT INTO team_strategy(course_id,strategy_name,strategy_id)
+        VALUES (#{courseId},'ConflictCourseStrategy',#{id});
+    </insert>
+
+    <insert id="addMemberLimitStrategy" parameterType="com.bkg.coursemanager.entity.strategy.MemberLimitStrategy" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO member_limit_strategy(min_member, max_member)
+        VALUES (#{min_member},#{max_member});
+    </insert>
+
+    <insert id="addMemberLimitStrategyIntoAnd" parameterType="com.bkg.coursemanager.entity.strategy.MemberLimitStrategy" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO team_and_strategy(strategy_name,strategy_id)
+        VALUES ('MemberLimitStrategy',#{id});
+    </insert>
+
+    <insert id="addMemberLimitStrategyIntoTeam" parameterType="com.bkg.coursemanager.entity.strategy.MemberLimitStrategy" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO team_strategy(course_id,strategy_serial,strategy_name,strategy_id)
+        VALUES (#{courseId},'1','TeamAndStrategy',#{id});
+    </insert>
+
+    <insert id="addCourseMemberLimitStrategy" parameterType="com.bkg.coursemanager.entity.strategy.CourseMemberLimitStrategy" useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO course_member_limit_strategy(course_id,min_member, max_member)
+        VALUES (#{courseId},#{min_member},#{max_member});
+    </insert>
+
+    <select id="getMaxOrId" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM team_or_strategy;
+    </select>
+
+    <select id="getMaxAndId" resultType="java.lang.Integer">
+        SELECT MAX(id) FROM team_and_strategy;
+    </select>
+
+    <insert id="addCourseMemberLimitStrategyIntoOr">
+        INSERT INTO team_or_strategy(id,strategy_name,strategy_id)
+        VALUES (#{maxOrId},'CourseMemberLimitStrategy',#{courseMemberStrategyId});
+    </insert>
+
+    <insert id="addCourseMemberLimitStrategyIntoAnd">
+        INSERT INTO team_and_strategy(id,strategy_name,strategy_id)
+        VALUES (#{maxAndId},'TeamOrStrategy',#{maxOrId});
+    </insert>
+
+</mapper>

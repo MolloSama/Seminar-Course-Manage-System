@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		var url='/course';
+		//alert(url);
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: true,
+            success: function(data) {
+              //alert("success!");
+              for (var i=0;i<data.length;i++) {
+                var id = data[i]['id'];
+                var name = data[i]['name'];		 
+                //alert("success!!");
+                
+				html='';
+				html+=
+					'<div>'+
+					' <p id="'+name+'">&nbsp;&nbsp;&nbsp;&nbsp;'+name+'</p>'+
+					' <ul class="'+name+'">'+
+						' <li class="grade" id="'+id+'" onclick=toGrade('+id+')>学生成绩</li>'+
+						' <li class="team" id="'+id+'" onclick=toTeam('+id+')>学生组队</li>'+
+						' <li class="course" id="'+id+'" onclick=toCourse('+id+')>课程信息</li>'+
+						' <li class="class" id="'+id+'" onclick=toClass('+id+')>班级信息</li>'+
+						' <li class="seminar" id="'+id+'" onclick=toSeminar('+id+')>讨论课轮次</li>'+
+						' <li class="share" id="'+id+'" onclick=toShare('+id+')>共享设置</li>'+
+					' </ul>'+
+				' </div> ';
+					//alert(html);
+					
+				 $("#second_section").append(html); 
+				 solideCourse(name);
+              }
+             	
+            },
+            error: function() {
+              alert("获取课程信息失败！");
+            }
+        });
+        
+		$("#top3").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		/*
+		$("#ooad").click(function() {
+			$(".ooad").slideToggle("slow");
+		});*/
+		$("#newCourse").click(function() {
+			window.location.href = "NewCourse.html";
+		});
+		/*
+		$(".grade").click(function() {
+			window.location.href = "grade.html";
+		});
+		$(".team").click(function() {
+			window.location.href = "Team.html";
+		});
+		$(".course").click(function() {
+			window.location.href = "CourseMessage.html";
+		});
+		$(".class").click(function() {
+			window.location.href = "ClassMessage.html";
+		});
+		$(".seminar").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$(".share").click(function() {
+			window.location.href = "Share.html";
+		});
+		*/
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#top1").click(function() {
+			window.history.back();
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+	});	
+	
+	function solideCourse(id) {
+		  $("#" + id).click(function() {
+		    $("." + id).slideToggle("slow");
+		  });
+		}
+	function toGrade(id)
+	{
+		  if(!window.localStorage){
+	          alert("浏览器不支持localstorage!!!");
+	      }else{ 
+	    	localStorage.setItem("courseId",id);
+	      }
+		  window.location.href = "grade.html";
+	}
+	function toTeam(id)
+	{
+		  if(!window.localStorage){
+	          alert("浏览器不支持localstorage!!!");
+	      }else{ 
+	    	localStorage.setItem("Team.html",id);
+	      }
+		  window.location.href = "Grade_student.html";
+	}
+	function toCourse(id)
+	{
+		  if(!window.localStorage){
+	          alert("浏览器不支持localstorage!!!");
+	      }else{ 
+	    	localStorage.setItem("courseId",id);
+	      }
+		  window.location.href = "CourseMessage.html";
+	}
+	function toClass(id)
+	{
+		  if(!window.localStorage){
+	          alert("浏览器不支持localstorage!!!");
+	      }else{ 
+	    	localStorage.setItem("courseId",id);
+	      }
+		  window.location.href = "ClassMessage.html";
+	}function toSeminar(id)
+	{
+		  if(!window.localStorage){
+	          alert("浏览器不支持localstorage!!!");
+	      }else{ 
+	    	localStorage.setItem("courseId",id);
+	      }
+		  window.location.href = "SeminarMessage.html";
+	}
+	function toShare(id)
+	{
+		  if(!window.localStorage){
+	          alert("浏览器不支持localstorage!!!");
+	      }else{ 
+	    	localStorage.setItem("courseId",id);
+	      }
+		  window.location.href = "Share.html";
+	}
+	
+</script>
+
+<style type="text/css">
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top2 {
+	position: absolute;
+	left: 33%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top3 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top1 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 11%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+p {
+	font-size: 90px;
+	margin: 0px;
+	padding: 10px;
+	background: white;
+}
+
+ul {
+	border-bottom: 1px solid;
+	display: none;
+}
+
+li {
+	font-size: 60px;
+	text-align: center;
+	border-bottom: 1px solid;
+	list-style: none;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+</style>
+
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">课程管理</label> <label
+			id="top3">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section" style="padding-top: 3%;">
+		<!--  
+		<div>
+			<p id="1" class="">&nbsp;&nbsp;&nbsp;&nbsp;OOAD</p>
+			<ul class="ooad">
+				<li class="grade">学生成绩</li>
+				<li class="team">学生组队</li>
+				<li class="course">课程信息</li>
+				<li class="class">班级信息</li>
+				<li class="seminar">讨论课轮次</li>
+				<li class="share">共享设置</li>
+			</ul>
+		</div>
+		-->
+	</div>
+	<br />
+	<br />
+	<br />
+	<br />
+	<div>
+		<p id="newCourse">
+			&nbsp;&nbsp;&nbsp;<strong>+</strong>&nbsp;&nbsp;&nbsp;&nbsp;新建课程
+		</p>
+	</div>
+</body>
+</html>

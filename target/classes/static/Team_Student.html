@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+
+		var storage=window.localStorage;
+		storage.setItem("courseId",1);
+		storage.setItem("userId",1);
+		var userId=storage.getItem("userId");
+		var courseId=storage.getItem("courseId");
+		
+		var myTeamStatus;
+		$.ajax({
+            type: "GET",
+            url: '/course/'+courseId+'/myTeamStatus',
+            //data: "data",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+            	myTeamStatus=data['status'];
+            },
+            error: function() {
+                alert("获取班级信息失败！");
+              }
+            });
+		if(myTeamStatus=="noTeam")
+			{
+				$("#createTeam").append('<button id="NewTeam" onclick=createTeam()>创建小组</button>')
+			}
+		
+		//alert("teamId:"+teamId);
+		
+
+		//alert("teamId:"+teamId+"courseId:"+courseId);
+		var url='/course/'+courseId+'/team';
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+              for (var i=0;i<data.length;i++) {
+                var id = data[i]['id'];
+                var teamNumber = data[i]['teamNumber'];//需前端页面展示,新加一个属性组号
+                var classId = data[i]['classId'];
+                var classSerial = data[i]['class1']['serial'];
+                var teamSerial = data[i]['serial'];
+                var name = data[i]['name'];
+                var teamNumber = classSerial+'-'+teamSerial;
+                var leader = data[i]['leader'];
+                var leaderId = data[i]['leader']['id'];
+                //var members = data[i]['members'];
+				var html='<p id="'+teamNumber+'" class="teamNo">'+teamNumber+' '+name+'</p> ';
+				 
+				html+=' <div style="display: none" class="'+teamNumber+'"> ';
+				html+=
+					'<p class="member">'+
+						' <span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>'+
+						' <span style="margin-right: 5%">'+leader['account']+'</span> <span'+
+							' style="margin-right: 5%">'+leader['name']+'</span>'+
+					' </p> ';
+					//alert('/team/'+id+'/course/'+courseId+'/leader/'+leaderId);
+					$.ajax({
+			            type: "GET",
+			            url: '/team/'+id+'/course/'+courseId+'/leader/'+leaderId,
+			            //data: "data",
+			            dataType: "json",
+			            async: false,
+			            success: function(members) {
+			            	//alert('success!');
+			        		for(var j=0;j<members.length;j++)
+		        			{
+			        			var memberAccount=members[j]['account'];
+		        				var memberName=members[j]['name'];
+		        				var memberId=members[j]['id'];
+			        				html+=
+			        					'<p class="member">'+
+			        					' <span style="color: rgb(60, 200, 80); margin-right: 3%;">组员</span>'+
+			        					' <span style="margin-right: 5%">'+memberAccount+'</span><span'+
+			        						' style="margin-right: 5%">'+memberName+'</span> '+
+			        					' </p> ';
+		        			}
+			            },
+			            error: function() {
+			                alert("获取队伍失败！");
+			              }
+			            });
+					
+        		html+='</div> ';
+        		$("#teams").append(html);
+        		showTeamMembers(teamNumber);            
+              }
+              
+            },
+            error: function() {
+              alert("获取队伍信息失败！");
+            }
+        });
+ 
+		var storage=window.localStorage;
+		var courseId=storage.getItem("courseId");
+		var url='/course/'+courseId+'/noTeam';
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: true,
+            success: function(data) {
+              for (var i=0;i<data.length;i++) {
+                var id = data[i]['id'];
+                var account = data[i]['account'];
+                var name = data[i]['name'];
+                if(userId!=id)
+				{
+    				html=
+    					'<p class="student">'+
+    						' <span style="margin: 0 5%">'+account+'</span><span'+
+    							' style="margin-right: 5%">'+name+'</span>'+
+    					' </p> ';
+            		$("#Student_WithoutTeam").append(html);
+				}           
+              }
+              showStudentWithoutTeam(); 
+            },
+            error: function() {
+              alert("获取未组队学生信息失败！");
+            }
+        });
+        
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#a2").click(function() {
+			window.location.href = "StudentMain.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		/*
+		$("#NewTeam").click(function() {
+			window.location.href = "NewTeam.html";
+		});
+		*/
+		$("#top3").click(function() {
+			window.history.back();
+		});
+		/*
+		$(".seminar_all").click(function(e) {
+			var Name = "." + this.id;
+			$(Name).slideToggle("slow");
+		});
+		$(".seminar").click(function(e) {
+			var Name = "." + this.id;
+			$(Name).slideToggle("slow");
+		});
+		
+		$(".teamNo").click(function(e) {
+			var Name = "." + this.id;
+			$(Name).slideToggle("slow");
+		});
+		$("#WithoutTeam").click(function(e) {
+			
+			$("#Student_WithoutTeam").slideToggle("slow");
+		});
+		*/
+	});
+	function showTeamMembers(teamNumber) {
+		  $("#" + teamNumber).click(function() {
+		    $("." + teamNumber).slideToggle("slow");
+		  });
+		}
+	function showStudentWithoutTeam() {
+		  $("#WithoutTeam").click(function() {
+			  $("#Student_WithoutTeam").slideToggle("slow");
+			  });
+		}
+	function createTeam()
+	{
+		window.location.href = "NewTeam.html";
+	}
+</script>
+<style>
+html, body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 4.2em;
+}
+
+#top1 {
+	position: absolute;
+	left: 33%;
+	font-size: 2em;;
+	padding-top: 4%;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 5%;
+	font-size: 2.2em;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 5%;
+	font-size: 2.2em;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: -0.1em 0.2em 0.8em 0 rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 1.2em;
+	font-family: Microsoft YaHei;
+	padding: 0.4em 0.7em;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+.teamNo {
+	margin-top: 0.3em;
+	margin-bottom: 0.1em;
+	padding: 0.2em 0.15em;
+	font-size: 1.5em;
+	background: white;
+	max-height: 3.1em;
+	color: rgb(60, 200, 80);
+}
+
+#WithoutTeam {
+	margin-top: 0.3em;
+	margin-bottom: 0.1em;
+	padding: 0.2em 0.3em;
+	font-size: 1.5em;
+	background: white;
+	max-height: 3.1em;
+}
+
+.member {
+	margin: 1% 0 1% 0;
+	padding: 0.3em 0.1em;
+	font-size: 1.1em;
+	background: white;
+	list-style: none;
+	max-height: 3.1em;
+}
+
+.student {
+	margin: 1% 0 1% 0;
+	padding: 0.3em 0.15em;
+	font-size: 1.3em;
+	background: white;
+	list-style: none;
+	max-height: 3.1em;
+}
+
+button {
+	width: 100%;
+	font-size: 1.8em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: white;
+	border: 0.02em solid;
+	background: rgb(20, 255, 70);
+	vertical-align: middle;
+	padding: 0.2 0;
+	border-radius: 0.5em;
+	position: fixed;
+	bottom: 0;
+}
+</style>
+</head>
+
+<body>
+	<div id=top style="margin-bottom: 3%;">
+		<label id="top3">&lt;</label> <label id="top1">学生组队</label> <label
+			id="top2">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="secondSection">
+		<div id="teams">
+		<!-- 
+		<p id="1-1" class="teamNo">1-1 AAA</p>
+		<div style="display: none" class="1-1">
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>
+				<span style="margin-right: 5%">24320162200001</span> <span
+					style="margin-right: 5%">王二</span> <span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200002</span><span
+					style="margin-right: 5%">王三</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200003</span><span
+					style="margin-right: 5%">王四</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200004</span><span
+					style="margin-right: 5%">王五</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200005</span><span
+					style="margin-right: 5%">王六</span><span>J2ee</span>
+			</p>
+		</div>
+		 -->
+		<!--  
+		<p id="1-2" class="teamNo">1-2 BBB</p>
+		<div style="display: none" class="1-2">
+
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>
+				<span style="margin-right: 5%">24320162200001</span><span
+					style="margin-right: 5%">王二</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200002</span><span
+					style="margin-right: 5%">王三</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200003</span><span
+					style="margin-right: 5%">王四</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200004</span><span
+					style="margin-right: 5%">王五</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200005</span><span
+					style="margin-right: 5%">王六</span><span>J2ee</span>
+			</p>
+
+		</div>
+		<p id="1-3" class="teamNo">1-3 CCC</p>
+		<div style="display: none" class="1-3">
+
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>
+				<span style="margin-right: 5%">24320162200001</span><span
+					style="margin-right: 5%">王二</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200002</span><span
+					style="margin-right: 5%">王三</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200003</span><span
+					style="margin-right: 5%">王四</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200004</span><span
+					style="margin-right: 5%">王五</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200005</span><span
+					style="margin-right: 5%">王六</span><span>J2ee</span>
+			</p>
+
+		</div>
+		<p id="1-4" class="teamNo">1-4 DDD</p>
+		<div style="display: none" class="1-4">
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>
+				<span style="margin-right: 5%">24320162200001</span><span
+					style="margin-right: 5%">王二</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200002</span><span
+					style="margin-right: 5%">王三</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200003</span><span
+					style="margin-right: 5%">王四</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200004</span><span
+					style="margin-right: 5%">王五</span><span>J2ee</span>
+			</p>
+			<p class="member">
+				<span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+				<span style="margin-right: 5%">24320162200005</span><span
+					style="margin-right: 5%">王六</span><span>J2ee</span>
+			</p>
+		</div>
+			-->
+			</div>
+		
+		
+		<div>
+			<p id="WithoutTeam">未组队学生</p>
+			 
+			<div id="Student_WithoutTeam" style="display: none;"> 
+				<!-- 
+				<p class="student">
+					<span style="margin: 0 5%">24320162200005</span><span
+						style="margin-right: 5%">王六</span><span>J2ee</span>
+				</p>
+				<p class="student">
+					<span style="margin: 0 5%">24320162200005</span><span
+						style="margin-right: 5%">王六</span><span>J2ee</span>
+				</p>
+				<p class="student">
+					<span style="margin: 0 5%">24320162200005</span><span
+						style="margin-right: 5%">王六</span><span>J2ee</span>
+				</p>
+				 -->
+			</div>
+		</div>
+		<div style="height: 3em;"></div>
+		<div id="createTeam">
+		<!-- <button id="NewTeam">创建小组</button> -->
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+#top2 {
+	position: absolute;
+	left: 33%;
+	font-size: 2em;;
+	padding-top: 4%;
+}
+
+#p1 {
+	text-align: center;
+	font-size: 1.4em;
+	color: rgb(0, 204, 51);
+	margin: 0;
+	padding: 0.3em 0;
+}
+
+.member {
+	font-size: 1.2em;
+	margin: 0.1em 0;
+	padding: 0.3em 0;
+	background: white;
+}
+
+.identity {
+	color: rgb(0, 204, 51);
+	padding-left: 0.2em;
+}
+
+#HeadMan {
+	color: rgb(0, 204, 51);
+	padding-left: 0.2em;
+}
+
+.MemberID {
+	margin-left: 0.5em;
+}
+
+.MemberName {
+	float: right;
+	margin-right: 0.5em;
+}
+
+.mess1 {
+	background: white;
+	font-size: 1.2em;
+	margin: 0;
+	padding: 0.3em;
+	color: rgb(0, 204, 51);
+}
+
+.StudentID {
+	margin: 0 5% 0 2%;
+}
+
+.StudentName {
+	margin-right: 5%;
+}
+
+#students {
+	overflow-y: scroll;
+	height: 10em;
+	margin-top: 0.3em;
+}
+
+.student {
+	margin: 1% 0 1% 0;
+	padding: 0.3em 0.15em;
+	font-size: 1.2em;
+	background: white;
+	list-style: none;
+	max-height: 3.1em;
+}
+
+#FindMess {
+	font-size: 1.1em;
+	color: rgb(0, 204, 51);
+	margin: 0.3em;
+}
+
+#bottomSection {
+	width: 100%;
+	margin-top: 1em;
+}
+
+.BottomP {
+	margin: 0.3em 0 0.6em 0.3em;
+}
+
+#FindInput {
+	font-size: 1em;
+	padding: 0.2em;
+	outline: none;
+	vertical-align: bottom;
+	border: none;
+	margin: 0;
+}
+
+#freeTeam {
+	background-color: rgb(255, 94, 94);
+	border: none;
+	border-radius: 0.5em;
+	font-size: 1em;
+	font-weight: bold;
+	color: white;
+	padding: 0.3em 0.6em;
+	margin-left: 0.4em;
+}
+
+#addMember {
+	background: rgb(243, 243, 243);
+	border: 0.1em solid rgb(0, 204, 51);
+	border-radius: 0.5em;
+	font-size: 1em;
+	font-weight: bold;
+	color: rgb(0, 204, 51);
+	padding: 0.3em 0.6em;
+	margin: 0 2em;
+	position: absolute;
+	right: 30%;
+}
+
+#sub {
+	background-color: rgb(0, 204, 51);
+	border: none;
+	border-radius: 0.5em;
+	font-size: 1em;
+	font-weight: bold;
+	color: white;
+	padding: 0.3em 0.6em;
+	position: absolute;
+	right: 3%;
+}
+#confirm,#confirm2 {
+	text-align: center;
+	width: 70%;
+	margin-left: 15%;
+	position: fixed;
+	top: 40%;
+	background: white;
+	box-shadow: 0em 0em 1em 0 rgb(0, 0, 0);
+	 display:none;
+}
+#reas{
+	font-size:1em;
+	padding:0.2em;
+}
+.butn1 {
+	border: none;
+	color: green;
+	font-size: 1.1em;
+	background: white;
+	margin: 0 1em;
+}

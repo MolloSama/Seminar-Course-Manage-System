@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/Grade.css">
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="./js/HeadTeacher.js"></script>
+<script>
+$(document).ready(function() {
+
+	$(".seminar_all").click(function(e) {
+		var $Team = $(this).next();
+		$($Team).slideToggle("slow");
+	});
+	$(".p1").click(function(e) {
+		var $SeminarAll = $(this).next();
+		$($SeminarAll).slideToggle("slow");
+	});
+	
+	localStorage.setItem("courseId",1);
+	var courseId=localStorage.getItem("courseId");
+	//找到该课程拥有的轮次信息
+	$.ajax({
+        type: "GET",
+        url: '/course/'+courseId+'/round',
+        //data: "data",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+        	for(var i=0;i<data.length;i++)
+        		{
+        			var roundId=data[i]['id'];
+        			var orderName=data[i]['orderName'];
+        			var calculatePreType=data[i]['calculateRepType'];
+        	        var calculateQueType=data[i]['calculateRepType'];
+        	        var calculateRepType=data[i]['calculateRepType'];
+        			html=
+        				'<div class="round" id="'+roundId+'"> <h2 onclick=showRound('+roundId+') class="seminar_all">'+orderName+'</h2>  </div>';
+        			$("#second_section").append(html);
+        			$.ajax({
+        		        type: "GET",
+        		        url: '/course/'+courseId+'/team',
+        		        //data: "data",
+        		        dataType: "json",
+        		        async: false,
+        		        success: function(teamResult) {
+        		        	for(var i=0;i<teamResult.length;i++)
+        					{
+        		        		var teamId=teamResult[i]['id'];
+        		        		var classId=teamResult[i]['class1']['id'];
+        		        		var classSerial=teamResult[i]['class1']['serial'];
+        		        		var teamSerial=teamResult[i]['serial'];
+        		        		html='<div roundId="'+roundId+'" class="Team" id="'+teamId+'" classId="'+classId+'"> </div>';
+        		        		$('[id="'+roundId+'"][class="round"]').append(html);
+        		        		html=
+        		        			'<p onclick=showTeam('+roundId+','+teamId+') class="p1"> '+
+        							'<span class="TeamNo">'+classSerial+'-'+teamSerial+'</span> <span roundId="'+roundId+'" teamId="'+teamId+'" class="GradeTotal"></span> '+
+        							'</p> <div class="SeminarAll" teamId="'+teamId+'" roundId="'+roundId+'"></div>';
+        		        		$('[id="'+teamId+'"][class="Team"][roundId="'+roundId+'"]').append(html);
+        					}
+        		        	
+        		        },
+        		        error: function() {
+        		            alert("获取班级信息失败！");
+        		        }
+        		    });
+        			
+        		}
+
+        },
+        error: function() {
+            alert("获取班级信息失败！");
+          }
+    });
+	
+	//加载每个队伍的成绩
+	$.ajax({
+        type: "GET",
+        url: '/course/'+courseId+'/team',
+        //data: "data",
+        dataType: "json",
+        async: false,
+        success: function(teamResult) {
+        	for(var i=0;i<teamResult.length;i++)
+			{
+        		var teamId=teamResult[i]['id'];
+        		var classId=teamResult[i]['class1']['id'];
+        		var classSerial=teamResult[i]['class1']['serial'];
+        		var teamSerial=teamResult[i]['serial'];
+        		
+        		$.ajax({
+        	        type: "GET",
+        	        url: '/seminarscore/'+classId+'/team/'+teamId,
+        	        //data: "data",
+        	        dataType: "json",
+        	        async: false,
+        	        success: function(seminar) {
+        	        	var seminarLength=seminar.length;    	
+        	        	//alert(seminarLength)
+        	        	$.ajax({
+        		            type: "GET",
+        		            url: '/roundscore/'+classId+'/team/'+teamId,
+        		            //data: "data",
+        		            dataType: "json",
+        		            async: false,
+        		            success: function(data) {
+        		            	//alert("success!");
+        		            	for(var i=0;i<data.length;i++)
+        		            		{
+        		            			var roundId=data[i]['classRound']['round']['id'];
+        		            			var classRoundId=data[i]['classRound']['id'];	
+        		            			var orderName=data[i]['classRound']['round']['orderName'];	
+        		            			var enrollNumber=data[i]['classRound']['enrollNumber'];
+        		            			var presentationScore=data[i]['presentationScore'];
+        		            			var reportScore=data[i]['reportScore'];
+        		            			var questionScore=data[i]['questionScore'];
+        		            			var totalScore=data[i]['totalScore'];
+        		                       
+        		            			$('[class=GradeTotal][roundId="'+roundId+'"][teamId="'+teamId+'"]').text(totalScore+'分');
+        		                        html='';   
+        		                		for(var seminarCount=0;seminarCount<seminarLength;seminarCount++)
+        		            			{   	
+        		                			var seminarRoundId=seminar[seminarCount]['classSeminar']['seminar']['round']['id'];
+        		                			var classSeminarId=seminar[seminarCount]['classSeminar']['id'];
+        		            				var seminarName=seminar[seminarCount]['classSeminar']['seminar']['topic'];
+        		            				var seminarPresentationScore=seminar[seminarCount]['presentationScore'];
+        		            				var seminarReportScore=seminar[seminarCount]['reportScore'];
+        		            				var seminarQuestionScore=seminar[seminarCount]['questionScore'];
+        		            				var seminarTotalScore=seminar[seminarCount]['totalScore'];
+											if(roundId==seminarRoundId)
+												{
+	        		            				html+=
+	        		            					'<div class="Seminar"> '+
+	        		        						'<p id="yonli" class="seminarName">'+seminarName+'</p> ';
+	        		        					html+='<div class="yonli"> '+
+	        		        								'<p class="mess1"> '+
+	        		        								'<span>展示：</span> <input value="'+seminarPresentationScore+'" readonly="readonly" '+
+	        		        									'class="grade_" /> <span>提问：</span> <input value="'+seminarQuestionScore+'" '+
+	        		        									'readonly="readonly" class="grade_" /> <span>书面报告：</span> <input '+
+	        		        									'value="'+seminarReportScore+'" readonly="readonly" class="grade_" /> ' +
+	        		        								'</p> '+
+	        		        								'<p class="mess2"> '+
+	        		        									'<button class="change">修改成绩</button> '+
+	        		        								'</p> '+
+	        		        							'</div> '+
+	        		        						'</div> ';
+												}
+        		            			}
+        		                		//alert("presentationScore:"+presentationScore);
+        		                		html+=
+        		            				'<div class="grade_all"> '+
+        		    							'<p class="p2">总成绩</p> '+
+        		    							'<div class="div1"> '+
+        		    								'<p class="mess1"> '+
+        		    								'<span>展示：</span> <input value="'+presentationScore+'" readonly="readonly" '+
+        		    									'class="grade_" /> <span>提问：</span> <input value="'+questionScore+'" '+
+        		    									'readonly="readonly" class="grade_" /> <span>书面报告：</span> <input '+
+        		    									'value="'+reportScore+'" readonly="readonly" class="grade_" /> '+
+        		    								'</p>'+
+        		    							'</div> '+
+        		    						'</div> ';
+        		    					//alert(html);
+        		    					//alert("teamId:"+teamId+"roundId:"+roundId);
+        		        				$('[class="SeminarAll"][teamId="'+teamId+'"][roundId="'+roundId+'"]').append(html);
+        		        				//showRound(classRoundId);
+        		            		}
+        		            },
+        		            error: function() {
+        		                alert("获取班级信息失败！");
+        		              }
+        		            });
+        	        	
+        	        },
+        	        error: function() {
+        	            alert("获取班级信息失败！");
+        	          }
+        	        });
+			}
+        	
+        },
+        error: function() {
+            alert("获取班级信息失败！");
+        }
+    });
+
+	//找到相应课程的所有班级
+	/*
+
+	$.ajax({
+        type: "GET",
+        url: '/course/'+courseId+'/class',
+        //data: "data",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+        },
+        error: function() {
+            alert("获取班级信息失败！");
+          }
+    });
+	*/
+});
+function showRound(roundId)
+{	
+	$('[class="Team"][roundId="'+roundId+'"]').slideToggle("slow");
+}
+
+function showTeam(roundId,teamId)
+{	
+	$('[class="SeminarAll"][teamId="'+teamId+'"][roundId="'+roundId+'"]').slideToggle("slow");
+}
+
+
+</script>
+
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">学生成绩</label> <label
+			id="top3">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<!-- 
+		<div class="round" id="">
+		
+		<h2 class="seminar_all">第一轮</h2>
+		
+		<div class="Team" id="" >
+			--------------
+			<p class="p1">
+				<span class="TeamNo">1-1</span> <span class="GradeTotal">4.5</span>分
+			</p>
+			<div class="SeminarAll">
+				<div class="Seminar">
+					<p id="yonli" class="seminarName">用例分析</p>
+					<div class="yonli">
+						<p class="mess1">
+							<span>展示：</span> <input value="5.0" readonly="readonly"
+								class="grade_" /> <span>提问：</span> <input value="5.0"
+								readonly="readonly" class="grade_" /> <span>书面报告：</span> <input
+								value="5.0" readonly="readonly" class="grade_" />
+						</p>
+						<p class="mess2">
+							<button class="change">修改成绩</button>
+						</p>
+					</div>
+				</div>
+				<div class="Seminar">
+					<p id="yewu" class="seminarName">业务流程分析</p>
+					<div class="业务">
+						<p class="mess1">
+							<span>展示：</span> <input value="5.0" readonly="readonly"
+								class="grade_" /> <span>提问：</span> <input value="5.0"
+								readonly="readonly" class="grade_" /> <span>书面报告：</span> <input
+								value="5.0" readonly="readonly" class="grade_" />
+						</p>
+						<p class="mess2">
+							<button class="change">修改成绩</button>
+						</p>
+					</div>
+				</div>
+				<div class="grade_all">
+					<p class="p2">总成绩</p>
+					<div class="div1">
+						<p class="mess1">
+							<span>展示：</span> <input value="5.0" readonly="readonly"
+								class="grade_" /> <span>提问：</span> <input value="5.0"
+								readonly="readonly" class="grade_" /> <span>书面报告：</span> <input
+								value="5.0" readonly="readonly" class="grade_" />
+						</p>
+					</div>
+				</div>
+			</div>
+			-----------
+		</div>
+		
+		</div>
+		-->
+	</div>
+</body>
+</html>

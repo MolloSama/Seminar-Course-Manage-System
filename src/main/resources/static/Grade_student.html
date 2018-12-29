@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+/**
+ * 
+ */
+	$(document).ready(function() {	
+		
+		var storage=window.localStorage;
+		var courseId=storage.getItem("courseId");
+		var userId=storage.getItem("userId");
+		var classId;
+		var teamId;
+		//取到相应课程的班级ID
+		/*
+		$.ajax({
+	            type: "GET",
+	            url: '/course/'+courseId+'/student/'+userId+'/class',
+	            //data: "data",
+	            dataType: "json",
+	            async: false,
+	            success: function(data) {
+	            	classId=data['id'];
+	            },
+	            error: function() {
+	                alert("获取班级信息失败！");
+	              }
+	            });
+		*/
+		//取到相应课程的队伍ID
+		$.ajax({
+            type: "GET",
+            url: '/course/'+courseId+'/myTeam',
+            //data: "data",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+            	teamId=data['id'];
+            	classId=data['class1']['id'];
+            },
+            error: function() {
+                alert("获取班级信息失败！");
+              }
+            });
+		alert("teamId:"+teamId);
+		
+		//取到相应课程相应讨论课班级的讨论课分数
+		
+		$.ajax({
+            type: "GET",
+            url: '/seminarscore/'+classId+'/team/'+teamId,
+            //data: "data",
+            dataType: "json",
+            async: false,
+            success: function(seminar) {
+            	var seminarLength=seminar.length;
+            	alert(seminarLength)
+            	$.ajax({
+    	            type: "GET",
+    	            url: '/roundscore/'+classId+'/team/'+teamId,
+    	            //data: "data",
+    	            dataType: "json",
+    	            async: false,
+    	            success: function(data) {
+    	            	alert("success!");
+    	            	for(var i=0;i<data.length;i++)
+    	            		{
+    	            			var roundId=data[i]['classRound']['round']['id'];
+    	            			var classRoundId=data[i]['classRound']['id'];	
+    	            			var orderName=data[i]['classRound']['round']['orderName'];	
+    	            			var enrollNumber=data[i]['classRound']['enrollNumber'];
+    	            			var presentationScore=data[i]['presentationScore'];
+    	            			var reportScore=data[i]['reportScore'];
+    	            			var questionScore=data[i]['questionScore'];
+    	            			var totalScore=data[i]['totalScore'];
+    	        				var html='<div class="round">'+'<h2 id="round'+classRoundId+'" class="roundName">'+orderName+'</h2>'+
+    	                        '	<div class="round'+classRoundId+'" style="margin: 5% 0; display: none;"> ';
+    	                       
+    	                        
+    	                		for(var seminarCount=0;seminarCount<seminarLength;seminarCount++)
+    	            			{
+    	                			var seminarRoundId=seminar[seminarCount]['classSeminar']['seminar']['round']['id'];
+    	                			var classSeminarId=seminar[seminarCount]['classSeminar']['id'];
+    	            				var seminarName=seminar[seminarCount]['classSeminar']['seminar']['topic'];
+    	            				var seminarPresentationScore=seminar[seminarCount]['presentationScore'];
+    	            				var seminarReportScore=seminar[seminarCount]['reportScore'];
+    	            				var seminarQuestionScore=seminar[seminarCount]['questionScore'];
+    	            				var seminarTotalScore=seminar[seminarCount]['totalScore'];
+    	            				if(seminarRoundId==roundId)
+    	            					{
+        	            				html+=   
+        	            					'<div class="seminar_one">'+
+        	            						' <p style="padding: 2% 0 2% 5%; margin: 2% 0 0 0; font-size: 70px; background: white;"'+
+        	            							' id="yonli" class="seminar" onclick=showSeminarGrade('+classSeminarId+')>'+seminarName+'</p> '+
+        	            					' </div> ';
+        	            				html+=
+        	            					'<div'+
+        	        						' style="border: 0.5px solid; padding-left: 2%; margin-top: 2%; display: none;"'+
+        	        						' class="yewu" id="seminar'+classSeminarId+'">'+
+        	        						' <p style="margin: 0; font-size: 50px; padding-top: 3%;>'+
+        	        						' <span>展示：</span><input style="" value="'+seminarPresentationScore+'" readonly="true" /> <span>提问：</span><input'+
+        	        							' style="" value="'+seminarQuestionScore+'" readonly="true" /> <span>书面报告：</span><input'+
+        	        							' style="" value="'+seminarReportScore+'" readonly="true" />'+
+        	        						' </p>'+
+        	        						' <p style="margin: 0; font-size: 50px; padding-top: 1%;">'+
+        	        						' 总成绩：<input style="" value="'+seminarTotalScore+'" readonly="true" />'+
+        	        						' </p>'+
+        	        					' </div>';
+    	            					}
+    	            			}
+    	        				html+= 	
+    	        					'<div'+
+    	        						' style="border: 0.5px solid; padding-left: 2%; margin-top: 2%;"'+
+    	        						' class="yewu">'+
+    	        						' <p style="margin: 0; font-size: 50px; padding-top: 3%;">'+
+    	        						' <span>展示：</span><input style="" value="'+presentationScore+'" readonly="true" /> <span>提问：</span><input'+
+    	        							' style="" value="'+questionScore+'" readonly="true" /> <span>书面报告：</span><input'+
+    	        							' style="" value="'+reportScore+'" readonly="true" />'+
+    	        						' </p>'+
+    	        						' <p style="margin: 0; font-size: 50px; padding-top: 1%;">'+
+    	        						' 总成绩：<input style="" value="'+totalScore+'" readonly="true" />'+
+    	        						' </p>'+
+    	        					' </div>'+
+    	        					' </div>'+' </div>';
+    	        				$("#rounds").append(html);
+    	        				showRound(classRoundId);
+    	            		}
+    	            },
+    	            error: function() {
+    	                alert("获取班级信息失败！");
+    	              }
+    	            });
+            	
+            },
+            error: function() {
+                alert("获取班级信息失败！");
+              }
+            });
+		/*
+		alert("teamId:"+teamId);
+		var url='/course/'+courseId+'/score';
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+              for (var i=0;i<data.length;i++) {
+                var id = data[i]['id'];
+                var presentationScore = data[i]['presentationScore'];
+                var questionScore = data[i]['questionScore'];
+                var reportScore = data[i]['reportScore'];
+                var finalScore = data[i]['finalScore'];
+                var roundName = data[i]['roundName'];
+				var html='<div id='+id+' class="round">'+'<h2 id="round'+id+'" class="roundName">'+roundName+'</h2>'+
+                '	<div class="round'+id+'" style="margin: 5% 0; display: none;"> ';
+        		var seminarList = data[i]['seminars'];
+        			
+        		
+        		for(var j=0;j<seminarList.length;j++)
+        			{
+        				var seminarName=seminarList[j]['name'];
+        				html+=
+        					'<div class="seminar_one">'+
+        						' <p style="padding: 2% 0 2% 5%; margin: 2% 0 0 0; font-size: 70px; background: white;"'+
+        							' id="yonli" class="seminar">'+seminarName+'</p>'+
+        					' </div>';
+        			}
+        		
+				html+= 	
+					'<div'+
+						' style="border: 0.5px solid; padding-left: 2%; margin-top: 2%;"'+
+						' class="yewu">'+
+						' <p style="margin: 0; font-size: 50px; padding-top: 3%;">'+
+						' <span>展示：</span><input style="" value="'+presentationScore+'" readonly="true" /> <span>提问：</span><input'+
+							' style="" value="'+questionScore+'" readonly="true" /> <span>书面报告：</span><input'+
+							' style="" value="'+reportScore+'" readonly="true" />'+
+						' </p>'+
+						' <p style="margin: 0; font-size: 50px; padding-top: 1%;">'+
+						' 总成绩：<input style="" value="'+finalScore+'" readonly="true" />'+
+						' </p>'+
+					' </div>'+
+					' </div>'+' </div>';
+					
+				
+                $("#rounds").append(html);
+                showRound(id);
+              }
+              
+            },
+            error: function() {
+              alert("获取讨论课信息失败！");
+            }
+        });
+        */
+        
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+		/*$(".seminar_all").click(function(e) {
+			
+			var Name = "." + this.id;
+			$(Name).slideToggle("slow");
+		});*/
+	});
+
+	function showRound(id) 
+	{
+		  $("#round" + id).click(function() {
+		    $(".round" + id).slideToggle("slow");
+		  });
+		}
+	function showSeminarGrade(id)
+	{
+		$("#seminar"+id).slideToggle("slow");
+	}
+</script>
+<style>
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 33%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+h2 {
+	font-size: 80px;
+	font-weight: bold;
+	font-family: Microsoft YaHei;
+	color: rgb(60, 200, 80);
+	margin: 2% 0px;
+	padding: 15px 0px;
+	text-align: center;
+	background: white;
+}
+
+input {
+	border: 0;
+	width: 10%;
+	height: 7%;
+	font-size: 50px;
+	background: rgb(243, 243, 243);
+	color: rgb(60, 200, 80);
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<label id="top3">&lt;</label> <label id="top1">学生成绩</label> <label
+			id="top2">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="rounds">
+		<!--  
+		<div id="second_section" class="round">
+		<h2 id="first" class="seminar_all" >第一轮</h2><!-- onclick时间
+		<div class="first" style="margin: 5% 0; display: none;">
+			<div class="seminar_one">
+				<p
+					style="padding: 2% 0 2% 5%; margin: 2% 0 0 0; font-size: 70px; background: white;"
+					id="yonli" class="seminar">用例分析</p>
+			</div>
+			<div class="seminar_one">
+				<p
+					style="padding: 2% 0 2% 5%; margin: 2% 0 0 0; font-size: 70px; background: white;"
+					id="yewu" class="seminar">业务流程</p>
+			</div>
+			<div
+					style="border: 0.5px solid; padding-left: 2%; margin-top: 2%;"
+					class="yewu">
+					<p style="margin: 0; font-size: 50px; padding-top: 3%;">
+						<span>展示：</span><input style="" value="5.0" readonly="true" /> <span>提问：</span><input
+							style="" value="5.0" readonly="true" /> <span>书面报告：</span><input
+							style="" value="5.0" readonly="true" />
+					</p>
+					<p style="margin: 0; font-size: 50px; padding-top: 1%;">
+						总成绩：<input style="" value="5.0" readonly="true" />
+					</p>
+			</div>
+		</div>
+	</div>
+	 -->
+	</div>
+
+</body>
+
+</html>

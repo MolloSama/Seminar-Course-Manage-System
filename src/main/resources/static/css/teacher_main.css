@@ -1,0 +1,36 @@
+@charset "UTF-8";
+#top2 {
+	position: absolute;
+	left: 45%;
+	font-size: 2.2em;
+	padding-top: 4%;
+}
+#second_section {
+	font-size: 2em;
+}
+
+img {
+	width: 1.2em;
+	height: 1.2em;
+	vertical-align: bottom;
+}
+
+.cin {
+	float:right;
+	margin-right: 7%;
+	color: rgb(160, 160, 160);
+}
+
+#course {
+	background: white;
+	margin-top: 10%;
+	padding-top: 0.2em;
+	padding-bottom:0.2em;
+}
+
+#Personal {
+	background: white;
+	margin-top: 3%;
+	padding-top: 0.2em;
+	padding-bottom:0.2em;
+}

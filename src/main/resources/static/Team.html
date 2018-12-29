@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		localStorage.setItem("courseId",1);
+		var storage=window.localStorage;
+		var courseId=storage.getItem("courseId");
+		var url='/course/'+courseId+'/team';
+        $.ajax({
+            type: "GET",
+            url: url,
+            //data: "data",
+            dataType: "json",
+            async: false,
+            success: function(data) {
+              for (var i=0;i<data.length;i++) {
+                var id = data[i]['id'];
+                var teamNumber = data[i]['serial'];//需前端页面展示,新加一个属性组号
+                var teamSerial = data[i]['class1']['serial']+'-'+teamNumber;
+                var classId = data[i]['class1']['id'];
+                var name = data[i]['name'];
+                var courseId = data[i]['course']['id'];
+                var leader = data[i]['leader'];
+                var leaderId = leader['id'];
+                var leaderAccount = leader['account'];
+				var html='<p onclick=showTeam('+id+') id="'+id+'" class="teamNo">'+teamSerial+' '+name+'</p>';
+				html+=' <div id="'+id+'" class="teamDescription" style="display: none" >';
+				html+=' <ul> ';
+				html+=
+					'<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>'+
+					' <span style="margin-right: 5%">'+leaderAccount+'</span><span'+
+					' style="margin-right: 5%">'+leader['name']+'</span></li> ';
+					$.ajax({
+			            type: "GET",
+			            url: '/team/'+id+'/course/'+courseId+'/leader/'+leaderId,
+			            //data: "data",
+			            dataType: "json",
+			            async: false,
+			            success: function(members) {
+			            	//alert('success!');
+			        		for(var j=0;j<members.length;j++)
+		        			{
+			        			var memberAccount=members[j]['account'];
+		        				var memberName=members[j]['name'];
+		        				var memberId=members[j]['id'];
+			        				html+=
+			        					'<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span> '+
+			        					'<span style="margin-right: 5%">'+memberAccount+'</span><span '+
+			        					'style="margin-right: 5%">'+memberName+'</span> </li> ';
+		        			}
+			            },
+			            error: function() {
+			                alert("获取队伍信息失败！");
+			              }
+			            });
+        		html+='</ul> ';
+        		html+='</div> ';
+        		$("#teams").append(html);       
+              }
+            },
+            error: function() {
+              alert("获取队伍信息失败！");
+            }
+        });
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+		/*
+		$(".seminar_all").click(function(e) {
+			var Name = "." + this.id;
+			$(Name).slideToggle("slow");
+		});
+		$(".seminar").click(function(e) {
+			var Name = "." + this.id;
+			$(Name).slideToggle("slow");
+		});
+		*/
+	});
+	function showTeam(id)
+	{
+		$('[id="'+id+'"][class="teamDescription"]').slideToggle("slow");
+	}
+</script>
+<style>
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 33%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 5%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 5%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+p {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 70px;
+	background: white;
+}
+
+li {
+	margin: 1% 0 1% 0;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 50px;
+	background: white;
+	list-style: none;
+}
+</style>
+</head>
+
+<body>
+	<div id=top style="margin-bottom: 3%;">
+		<label id="top3">&lt;</label> <label id="top1">学生组队</label> <label
+			id="top2">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="teams">
+		<!-- 
+		<p id="1-1" class="teamNo">1-1 AAA</p>
+		<div style="display: none" class="1-1">
+			<ul>
+				<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组长:</span>
+					<span style="margin-right: 5%">111111111</span><span
+					style="margin-right: 5%">王二</span><span>J2ee</span></li>
+				<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+					<span style="margin-right: 5%">222222222</span><span
+					style="margin-right: 5%">王三</span><span>J2ee</span></li>
+				<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+					<span style="margin-right: 5%">333333333</span><span
+					style="margin-right: 5%">王四</span><span>J2ee</span></li>
+				<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+					<span style="margin-right: 5%">4444444444</span><span
+					style="margin-right: 5%">王五</span><span>J2ee</span></li>
+				<li><span style="color: rgb(60, 200, 80); margin-right: 3%;">组员:</span>
+					<span style="margin-right: 5%">55555555555</span><span
+					style="margin-right: 5%">王六</span><span>J2ee</span></li>
+			</ul>
+		</div>
+		 -->
+	</div>
+</body>
+</html>

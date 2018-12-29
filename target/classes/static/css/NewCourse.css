@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+#top2 {
+	position: absolute;
+	right: 33%;
+	font-size: 1.8em;
+	padding-top: 0.5em;
+}
+
+.ele {
+	margin: 0;
+	padding: 0.5em;
+}
+
+button {
+	background: rgb(60, 200, 80);
+	font-size: 2.2em;
+	font-weight: bold;
+	color: white;
+	text-align: center;
+	border: none;
+	border-radius: 16px;
+	width: 100%;
+}
+
+#name {
+	border: none;
+	padding: 0.3em 0.4em;
+	font-size: 1.7em;
+	margin: 0;
+	width: 100%;
+}
+
+.mess1 {
+	margin: 0;
+	padding: 0.1em 0 0.2em 0.4em;
+	font-size: 1.7em;
+}
+
+.mess2 {
+	color: rgb(60, 200, 80);
+	margin-left: 1em;
+	font-size: 1.7em;
+}
+
+.mess3 {
+	font-size: 1.7em;
+	margin: 0;
+	padding: 0.4em 0.2em;
+}
+
+.mess4 {
+	margin: 0.3em;
+	font-size: 1.7em;
+}
+
+#img1 {
+	width: 1em;
+	height: 1em;
+	vertical-align: bottom;
+	float: right;
+	margin-right: 1em;
+}
+
+#intro {
+	font-size: 1.5em;
+	margin: 0.2em 0;
+	padding: 0.3em;
+	border: none;
+	width: 100%;
+}
+
+.div1 {
+	background: white;
+	padding: 0.5em;
+}
+
+.div2 {
+	text-align: center;
+	margin-top: 2.5em;
+	margin-bottom: 2.5em;
+}
+
+.Time {
+	background: white;
+	margin-top: 0.5em;
+	padding: 0.5em 0;
+}
+
+select {
+	font-size: 1.3em;
+	padding: 0.1em 3em 0.1em 0.2em;
+	margin-left: 1em;
+}
+
+option {
+	font-size: 1em;
+}
+
+.p1 {
+	padding-top: 0.4em;
+}
+
+.timeInput {
+	font-size: 1.3em;
+	border: none;
+	color: rgb(60, 200, 80);
+	padding: 0.1em;
+	width: 45%;
+}

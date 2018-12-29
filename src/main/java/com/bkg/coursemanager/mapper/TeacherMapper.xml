@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace用来指定该xml文件对应的interface  -->
+<!-- 默认idea对于该xml文件是几乎没有任何提示的，需要装一个叫 mybatis free plugins 的插件 -->
+<mapper namespace="com.bkg.coursemanager.mapper.TeacherMapper">
+    <!-- id 就是方法名称 -->
+    <!-- resultType 指定返回的类型，如果返回多个，一样只要指定这个类型,mybatis会自动生成一个list-->
+    <!-- #{xxx}是参数的名称，参数会被填到这个位置 -->
+    <resultMap id="ResultTeacher" type="com.bkg.coursemanager.entity.User">
+        <id property="id" column="id" />
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="name" column="teacher_name"/>
+        <result property="isActive" column="is_active"/>
+        <result property="email" column="email"/>
+    </resultMap>
+    <select id="listTeacher" resultMap="ResultTeacher">
+        SELECT
+        id,
+        account,
+        password,
+        teacher_name,
+        is_active,
+        email
+        FROM teacher;
+    </select>
+
+    <insert id="insertTeacher" keyColumn="id" keyProperty="teacher.id" useGeneratedKeys="true">
+        INSERT INTO teacher(
+        account,
+        password,
+        teacher_name,
+        is_active,
+        email
+        )
+        VALUES (#{teacher.account},
+        #{teacher.password},
+        #{teacher.name},
+        #{teacher.isActive},
+        #{teacher.email}
+        );
+    </insert>
+    
+    <select id="selectTeacherByTeacherId" resultMap="ResultTeacher">
+        SELECT
+        id,
+        account,
+        password,
+        teacher_name,
+        is_active,
+        email 
+        FROM teacher
+        WHERE id=#{teacherId};
+    </select>
+
+    <select id="selectTeacherByTeacherAccount" resultMap="ResultTeacher">
+        SELECT
+        account,
+        teacher_name,
+        email
+        FROM teacher
+        WHERE account=#{teacherAccount};
+    </select>
+
+    <select id="selectTeacherByTeacherName" resultMap="ResultTeacher">
+        SELECT
+        account,
+        teacher_name,
+        email
+        FROM teacher
+        WHERE teacher_name=#{teacherName};
+    </select>
+
+    <update id="updateTeacherByTeacherId">
+        UPDATE teacher
+        SET
+        account= #{teacher.account},
+        teacher_name = #{teacher.name},
+        email = #{teacher.email}
+        WHERE id = #{teacherId}
+    </update>
+
+    <delete id="deleteTeacherByTeacherId" parameterType="java.math.BigInteger">
+        delete from teacher
+        where id=#{teacherId}
+    </delete>
+
+    <!--应用途径：管理员重置教师密码，教师激活账号时修改密码-->
+    <update id="resetTeacherPasswordByTeacherId">
+        UPDATE teacher
+        SET
+        password = #{teacher.password},
+        is_active =1
+        WHERE id = #{teacherId}
+    </update>
+
+</mapper>

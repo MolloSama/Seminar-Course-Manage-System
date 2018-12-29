@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bkg.coursemanager.mapper.QuestionMapper">
+
+    <resultMap id="questionMap" type="com.bkg.coursemanager.entity.Question">
+        <id column="id" property="id" />
+        <result column="score" property="score" />
+
+        <association property="team" javaType="com.bkg.coursemanager.entity.Team">
+            <result column="id"  property="id" />
+            <result column="team_name"  property="name" />
+        </association>
+    </resultMap>
+    
+    <resultMap id="Question" type="com.bkg.coursemanager.entity.Question">
+        <id column="id" property="id" />
+        <result column="score" property="score" />
+        <result column="is_selected" property="asked" />
+        <result column="student_id" property="studentId" />
+        <result column="attendance_id" property="attendance.id" />
+        <result column="team_id" property="team.id"/>
+    </resultMap>
+
+    <select id="getAllQuestion" resultMap="questionMap">
+        SELECT a.id,a.team_name,b.id,b.score
+        FROM team a,question b,klass_seminar c
+        WHERE b.klass_seminar_id = c.id AND c.klass_id = #{classId} AND c.seminar_id = #{seminarId};
+    </select>
+    
+    <select id="getQuestionByClassSeminarId" resultMap="Question">
+        SELECT question.*
+        FROM question
+        WHERE klass_seminar_id= #{classSeminarId};
+    </select>
+
+    <insert id="askQuestion"  useGeneratedKeys="true"  keyProperty="id">
+        INSERT INTO question(student_id)
+        VALUES (#{studentId});
+    </insert>
+
+    <update id="scorePresentation">
+        UPDATE question SET score = #{question.score}
+        WHERE id = #{questionId};
+    </update>
+
+
+
+
+
+</mapper>

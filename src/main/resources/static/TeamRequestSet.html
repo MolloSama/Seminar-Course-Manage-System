@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Insert title here</title>
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/TeamRequestSet.css">
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="./js/HeadTeacher.js"></script>
+<script >
+
+/**
+ * 
+ */
+localStorage.setItem("courseId",1);
+var courseId=localStorage.getItem("courseId");
+var conflictNum=0;
+var selectNum=0;
+	
+$("document").ready(function(){
+	/*
+	var html1='<p><select class="Select1">'+
+	'<option>J2EE(邱老师)</option>'+
+	'<option>NET(杨老师)</option>'+
+	'<option>软件工程(王老师)</option>'+
+	'</select>'+
+	'<button class="move2">删除</button></p>'
+	var html2='<p class="mess5">'+
+	'<select class="Select3">'+
+	'<option>J2EE(邱老师)</option>'+
+	'<option>NET(杨老师)</option>'+
+	'<option>软件工程(王老师)</option>'+
+	'</select> <select id="least1" class="least">'+
+	'<option>1</option>'+
+	'<option>2</option>'+
+	'<option>3</option>'+
+	'</select>~<select id="most1" class="most">'+
+	'option>4</option>'+
+	'<option>5</option>'+
+	'<option>6</option>'+
+	'</select>'+
+	'<button class="move">删除</button>'+
+	'</p>'
+	var html3='<div class="div2_">'+html1+html1+
+	'<p class="add2">'+
+	'<button class="add_C">新增</button>'+
+	'<button class="move3">删除</button>'+
+	'</p></div>'
+	*/
+
+	$("#add1").click(function(){
+		html=
+			'<div class="div2_" id="'+conflictNum+'"> '+
+				'<p id="'+conflictNum+'" class="add2"> '+
+				'<button class="add_C" onclick=addConflictCourse('+conflictNum+')>新增</button> '+
+				'<button class="move3" onclick=deleteConflict('+conflictNum+')>删除</button> '+
+				'</p> '+
+			'</div> ';
+			
+		$(".div2").append(html);
+		conflictNum+=1;
+	});
+	
+	$("#add3").click(function(){
+		html=
+			'<p selectNum="'+selectNum+'" class="mess5"> '+
+				'<select selectNum="'+selectNum+'" class="Select3"> '+
+				'</select> '+
+				'<select selectNum="'+selectNum+'" id="least1" class="least"> '+
+					'<option>1</option> '+
+					'<option>2</option> '+
+					'<option>3</option> '+
+				'</select>~<select selectNum="'+selectNum+'" id="most1" class="most"> '+
+					'<option>4</option> '+
+					'<option>5</option> '+
+					'<option>6</option> '+
+				'</select> '+
+				'<button class="move" onclick=deleteSelect('+selectNum+')>删除</button> '+
+			'</p> ';
+			$("#div3_1_1").append(html);
+			$.ajax({
+				type:"GET",
+				url:"/course",
+				dataType:"json",
+				async: false,
+				success:function(data){
+					for(var i=0;i<data.length;i++)
+						{
+						var id=data[i]['id'];
+						var name=data[i]['name'];
+						var teacherName=data[i]['teacher']['name'];
+						if(id==courseId)continue;
+						html=
+							'<option class="selectCourse" courseId="'+id+'">'+name+'('+teacherName+')</option> ';
+						$('[class="Select3"][selectNum="'+selectNum+'"]').append(html);
+						//alert(html);
+						}
+				},
+				error:function(){
+					alert("出现错误");
+				}
+			});
+			selectNum+=1;
+			//alert("selectNum:"+selectNum);
+	});
+
+});
+
+function sub()
+{
+    var teamMin=$('[id="least"][class="least"]').find("option:selected").text();
+    var teamMax=$('[id="most"][class="most"]').find("option:selected").text();
+    teamMin=parseInt(teamMin);
+    teamMax=parseInt(teamMax);
+
+    json={
+        "courseId":courseId,
+        "min_member":teamMin,
+        "max_member":teamMax
+    };
+    alert(JSON.stringify(json));
+    $.ajax({
+        type: "POST",
+        url: '/team/strategy/'+courseId+'/memberlimit',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(json),
+        dataType: "json",
+        async: false,
+        success: function () {
+            alert("success!");
+        },
+        error: function (message) {
+            alert("删除组员失败！");
+        }
+    });
+
+
+
+    var memberLimit=document.getElementsByClassName("mess5");
+	var memberL=[];
+
+
+	for(var i=0;i<memberLimit.length;i++)
+		{
+			var selectNum=memberLimit[i].getAttribute("selectNum");
+			var selectCourseId=$('[class="Select3"][selectNum="'+selectNum+'"]').find("option:selected").attr("courseId");
+			var minMember=$('[id="least1"][selectNum="'+selectNum+'"]').find("option:selected").text();
+			var maxMember=$('[id="most1"][selectNum="'+selectNum+'"]').find("option:selected").text();
+			minMember=parseInt(minMember);
+			maxMember=parseInt(maxMember);
+			var json=
+			{
+				"courseId":selectCourseId,
+				"min_member":minMember,
+				"max_member":maxMember
+			};
+			memberL.push(json);
+			alert(JSON.stringify(json));
+		}
+			$.ajax({
+				type: "POST",
+				url: '/team/strategy/'+courseId+'/coursememberlimit',
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify(memberL),
+				dataType: "json",
+				async: false,
+				success: function () {
+		        	alert("success!");
+				},
+				error: function (message) {
+					alert("删除组员失败！");
+				}
+			});
+
+	var conflictLimit=document.getElementsByClassName("div2_");	
+	for(var i=0;i<conflictLimit.length;i++)
+		{
+			var conflictJson=[];
+			var conflicN=conflictLimit[i].getAttribute("id");
+			var $conflictCourse=$('[class="Select1"][conflictNum="'+conflicN+'"]');
+			for(var j=0;j<$conflictCourse.size();j++)
+				{
+					var courId=$($conflictCourse[j]).find("option:selected").attr("courseId");
+					var json={
+						"course":courseId,
+                        "courseId":courId
+					};
+					conflictJson.push(json);
+				}
+			//alert(JSON.stringify(conflictJson));
+			$.ajax({
+				type: "POST",
+				url: '/team/strategy/'+courseId+'/conflict',
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify(conflictJson),
+				dataType: "json",
+				async: false,
+				success: function () {
+		        	alert("success!");
+				},
+				error: function (message) {
+					alert("删除组员失败！");
+				}
+			});
+		}
+
+}
+
+function deleteSelect(selectNum1)
+{
+	//alert("remove!");
+	$('[class="mess5"][selectNum="'+selectNum1+'"]').remove();	
+	selectNum-=1;
+}
+
+function deleteConflict(conflictNum1)
+{
+	$('[class="div2_"][id="'+conflictNum1+'"]').remove();	
+	//alert(conflictNum);
+	conflictNum--;
+}
+
+function addConflictCourse(conflictNum1)
+{	
+	html=
+		'<p class="conflicCourse" conflictNum="'+conflictNum1+'"> '+
+			'<select conflictNum="'+conflictNum1+'" class="Select1"> '+
+			'</select> '+
+			'<button class="move2" onclick=deleteConflictCourse('+conflictNum1+')>删除</button> '+
+		'</p> ';
+	$('[class="add2"][id="'+conflictNum1+'"]').before(html);
+	$.ajax({
+	type:"GET",
+	url:"/course",
+	dataType:"json",
+	async: false,
+	success:function(data){
+		for(var i=0;i<data.length;i++)
+			{
+			var id=data[i]['id'];
+			var name=data[i]['name'];
+			var teacherName=data[i]['teacher']['name'];
+			if(id==courseId)continue;
+			html=
+				'<option class="conflictCourse" courseId="'+id+'">'+name+'('+teacherName+')</option> ';
+			$('[class="Select1"][conflictNum="'+conflictNum1+'"]').append(html);
+			}
+		var nowCourseNum=$('[class="div2_"][id="'+conflictNum1+'"]').attr("courseNum");
+		nowCourseNum=parseInt(nowCourseNum);
+		nowCourseNum+=1;
+		//alert("nowCourseNum:"+nowCourseNum);
+		$('[class="div2_"][id="'+conflictNum1+'"]').attr("courseNum",nowCourseNum);
+	},
+	error:function(){
+		alert("出现错误");
+	}
+	});
+}
+
+function deleteConflictCourse(conflictNum1)
+{
+	$('[class="conflicCourse"][conflictNum="'+conflictNum1+'"]').remove();
+	var nowCourseNum=$('[class="div2_"][id="'+conflictNum1+'"]').attr("courseNum");
+	nowCourseNum=parseInt(nowCourseNum);
+	nowCourseNum-=1;
+	alert("nowCourseNum:"+nowCourseNum);
+	$('[class="div2_"][id="'+conflictNum1+'"]').attr("courseNum",nowCourseNum);
+	//alert(courseNum);
+}
+
+</script>
+<style>
+</style>
+</head>
+<body>
+	<div id="top">
+		<span id="top1">&lt;</span> <span id="top2">组队要求设置</span>
+	</div>
+	<div id="div1">
+		<p class="mess1">冲突课程：</p>
+		<div class="div2">
+			<!--  
+			<div class="div2_">
+				----------- 
+				<p>
+					<select class="Select1">
+						<option id="">J2EE(邱老师)</option>
+						<option>NET(杨老师)</option>
+						<option>软件工程(王老师)</option>
+					</select>
+					<button class="move2">删除</button>
+				</p>
+				----------------
+				<p>
+					<select class="Select1">
+						<option>J2EE(邱老师)</option>
+						<option>NET(杨老师)</option>
+						<option>软件工程(王老师)</option>
+					</select>
+					<button class="move2">删除</button>
+				</p>
+				<p class="add2">
+					<button class="add_C">新增</button>
+					<button class="move3">删除</button>
+				</p>
+			</div>
+			-->
+		</div>
+		<p class="add">
+			<button id="add1">新增</button>
+		</p>
+		<p class="mess3">选修不同冲突课程的学生不可同组</p>
+	</div>
+	<div id="div3">
+		<p class="mess1">组员基本要求：</p>
+		<div id="div3_1">
+			<p class="mess4">
+				小组人数(下限~上限)： <select id="least" class="least">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+				</select>~<select id="most" class="most">
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
+				</select>
+			</p>
+			<p class="mess4">组内选修课程及人数：</p>
+			<div id="div3_1_1">
+				<!--  
+				<p class="mess5">
+					<select class="Select3">
+						<option>J2EE(邱老师)</option>
+						<option>NET(杨老师)</option>
+						<option>软件工程(王老师)</option>
+					</select><select id="least1" class="least">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+					</select>~<select id="most1" class="most">
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+					</select>
+					<button class="move">删除</button>
+				</p>
+				-->
+			</div>
+			<p class="add">
+				<button id="add3">新增</button>
+			</p>
+		</div>
+	</div>
+	<div id="bottom" onclick=sub()>
+		<button id="submit">确&nbsp;&nbsp;&nbsp;&nbsp;认</button>
+	</div>
+</body>
+</html>

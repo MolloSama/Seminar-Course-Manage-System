@@ -1,0 +1,66 @@
+#top2 {
+	position: absolute;
+	left: 33%;
+	font-size: 2em;;
+	padding-top: 4%; 
+}
+
+#students {
+	overflow-y: scroll;
+	height: 13.2em;
+	margin-top: 0.3em;
+}
+
+.student {
+	margin: 1% 0 1% 0;
+	padding: 0.3em 0.15em;
+	font-size: 1.2em;
+	background: white;
+	list-style: none;
+	max-height: 3.1em;
+}
+
+button {
+	width: 100%;
+	font-size: 1.8em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: white;
+	border: 0.02em solid;
+	background: rgb(20, 255, 70);
+	vertical-align: middle;
+	padding: 0.2 0;
+	border-radius: 0.5em;
+	position: fixed;
+	bottom: 0;
+}
+
+.mess1 {
+	background: white;
+	font-size: 1.4em;
+	margin: 0;
+	padding: 0.3em;
+}
+
+.mess2 {
+	font-size: 1.4em;
+	margin: 0;
+	padding: 0.3em;
+}
+
+select {
+	font-size: 1.3em;
+	padding: 0.1em 3em 0.1em 0.2em;
+}
+
+.StudentID {
+	margin: 0 5% 0 2%;
+}
+
+.StudentName {
+	margin-right: 5%;
+}
+
+.teamName {
+	border: none;
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+
+	$(document).ready(function() {
+		var storage=window.localStorage;
+		storage.setItem("courseId",1);
+		var courseId=storage.getItem("courseId");
+		//alert("hello");
+		//alert(courseId);
+		//alert(courseId);
+	    $.ajax({
+	        type: "GET",
+	        url: '/course',
+	        dataType: "json",
+	        async: false,
+	        success: function (message) {
+				for(var i=0;i<message.length;i++)
+					{
+						//alert($("#shareType").find("option:selected").attr('shareType'));
+						var id=message[i]['id'];
+						if($("#shareType").find("option:selected").attr('shareType')=="teamShare")
+							{
+							if(message[i]['teamMainCourse']!=null||id==courseId)continue;
+							}		
+						if($("#shareType").find("option:selected").attr('shareType')=="seminarShare")
+							{
+							if(message[i]['seminarMainCourse']!=null||id==courseId)continue;
+							}	
+						var courseName=message[i]['name'];
+						var teacherId=message[i]['teacher']['id'];
+						var teacherName=message[i]['teacher']['name'];
+						html='<option teacherId="'+teacherId+'" id="'+id+'" style="font-size: 0.2em;">'+courseName+'('+teacherName+'老师)</option>';
+						$("#courseAll").append(html);
+					}
+				
+	        },
+	        error: function (message) {
+	            alert("新建课程失败！");
+	        }
+	    });
+
+		$("#shareType").change(function(){
+			  //alert("change!");
+			  var shareType=$("#shareType").find("option:selected").attr("shareType");
+			  html='';
+			  if(shareType=="teamShare")
+				  {
+				    $.ajax({
+				        type: "GET",
+				        url: '/course',
+				        dataType: "json",
+				        async: false,
+				        success: function (message) {
+				        	html+=
+								'<select id="courseAll" style="font-size: 0.8em; padding: 0.15em 0.1e;"> ';
+							for(var i=0;i<message.length;i++)
+								{
+									var id=message[i]['id'];
+									if(message[i]['teamMainCourse']!=null||id==courseId)continue;
+									var courseName=message[i]['name'];
+									var teacherId=message[i]['teacher']['id'];
+									var teacherName=message[i]['teacher']['name'];
+									html+='<option teacherId="'+teacherId+'" id="'+id+'" style="font-size: 0.2em;">'+courseName+'('+teacherName+'老师)</option> ';
+								}
+							html+='</select> <br /> <br /> ';
+							$("#courseAll").replaceWith(html);
+				        },
+				        error: function (message) {
+				            alert("获取课程信息失败！");
+				        }
+				    });
+				  }
+			  else
+				  {
+				    $.ajax({
+				        type: "GET",
+				        url: '/course',
+				        dataType: "json",
+				        async: false,
+				        success: function (message) {
+				        	html+=
+								'<select id="courseAll" style="font-size: 0.8em; padding: 0.15em 0.1e;"> ';
+							for(var i=0;i<message.length;i++)
+								{
+									var id=message[i]['id'];
+									if(message[i]['seminarMainCourse']!=null||id==courseId)continue;
+									var courseName=message[i]['name'];
+									var teacherId=message[i]['teacher']['id'];
+									var teacherName=message[i]['teacher']['name'];
+									html+='<option teacherId="'+teacherId+'" id="'+id+'" style="font-size: 0.2em;">'+courseName+'('+teacherName+'老师)</option> ';
+									
+								}
+							html+='</select> <br /> <br /> ';
+							$("#courseAll").replaceWith(html);
+				        },
+				        error: function (message) {
+				            alert("获取课程信息失败！");
+				        }
+				    });
+				  }
+			});
+		$("#top2").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#top3").click(function() {
+			window.history.back();
+		});
+
+	});
+function sub()
+{
+	courseId=localStorage.getItem("courseId");
+	shareType=$("#shareType").find("option:selected").attr('shareType');
+	shareCourseId=$("#courseAll").find("option:selected").attr('id');
+	teacherId=$("#courseAll").find("option:selected").attr('teacherId');
+	var json={
+		'status':2,
+		'mainCourse':
+			{
+				'id':courseId,
+				
+			},
+		'subCourse':
+			{
+				'id':shareCourseId,
+				'teacher':
+					{
+						'id':teacherId
+					}
+			}
+	}
+	if(shareType="teamShare")url='/course/teamShareRequest';
+	else url='/course/seminarShareRequest';
+    $.ajax({
+        type: "POST",
+        url: url,
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(json),
+        dataType: "json",
+        async: false,
+        success: function (message) {
+			alert(message['status']);
+        },
+        error: function (message) {
+            alert("发起共享请求失败！");
+        }
+    });
+}
+
+</script>
+<style type="text/css">
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 33%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top2 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top3 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+.ele {
+	font-size: 4.5em;
+	background: white;
+	margin: 1% 0;
+	padding: 0.7em 1em;
+}
+
+button {
+	background: rgb(60, 200, 80);
+	font-size: 75px;
+	text-align: center;
+	font-family: Microsoft YaHei;
+	border-radius: 16px;
+	width: 80%;
+}
+</style>
+</head>
+
+
+<body>
+	<div id=top>
+		<span id="top3">&lt;</span> <span id="top1">共享设置</span> <span
+			id="top2">+</span>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section">
+		<div>
+			<p class="ele">
+				<span style="color: rgb(60, 200, 80); margin-right: 8%;">共享类型：</span>
+				<select id="shareType" style="font-size: 0.8em; padding: 0.15em 0.1e;">
+					<option shareType="seminarShare" style="font-size: 0.2em;">讨论课共享</option>
+					<option shareType="teamShare" style="font-size: 0.2em;">分组共享</option>
+				</select>
+			</p>
+			<p id="courses" class="ele">
+				<span style="color: rgb(60, 200, 80); margin-right: 8%;">共享对象：</span>
+				<select id="courseAll" style="font-size: 0.8em; padding: 0.15em 0.1e;">
+					<!--  
+					<option style="font-size: 0.2em;">.NET(**老师)</option>
+					<option style="font-size: 0.2em;">J2EE(**老师)</option>
+					-->
+				</select> <br /> <br /> 
+				<!--  
+				<span
+					style="color: rgb(60, 200, 80); margin-right: 8%;">冲突课程：</span> <select
+					style="font-size: 0.8em; padding: 0.15em 0.1e;">
+					<option style="font-size: 0.2em;">.NET(**老师)</option>
+					<option style="font-size: 0.2em;">J2EE(**老师)</option>
+				</select>
+				-->
+			</p>
+		</div>
+		<div
+			style="text-align: center; position: fixed; bottom: 7%; width: 100%;">
+			<button id="sure" onclick=sub()>确认共享</button>
+		</div>
+	</div>
+</body>
+</html>

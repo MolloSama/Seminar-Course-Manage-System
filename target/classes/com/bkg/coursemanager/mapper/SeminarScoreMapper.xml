@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bkg.coursemanager.mapper.SeminarScoreMapper">
+    <resultMap id="ResultSeminarScore" type="com.bkg.coursemanager.entity.SeminarScore" >
+        <result column="team_id" property="team.id" />
+        <result column="total_score" property="totalScore" />
+        <result column="presentaton_score" property="presentationScore" />
+        <result column="question_score" property="questionScore" />
+        <result column="report_score" property="reportScore" />
+        <association property="classSeminar" column="klass_seminar_id"                       
+            select="com.bkg.coursemanager.mapper.ClassSeminarMapper.selectClassSeminarById" />
+    </resultMap>
+    
+
+    
+    <select id="selectSeminarScoreByClassIdAndTeamId" resultMap="ResultSeminarScore">
+        SELECT seminar_score.* FROM seminar_score,klass_seminar
+        WHERE seminar_score.team_id= #{teamId}
+        AND klass_seminar.klass_id= #{classId}
+        AND seminar_score.klass_seminar_id = klass_seminar.id;
+    </select>
+    
+    <select id="selectSeminarScoreByClassSeminarId" resultMap="ResultSeminarScore">
+    	SELECT seminar_score.*
+    	FROM seminar_score
+    	WHERE klass_seminar_id= #{classSeminarId}
+    </select>
+    
+    <insert id="insertSeminarScore">
+        INSERT INTO seminar_score(
+        klass_seminar_id,
+        team_id,
+        total_score,
+        presentaton_score,
+        question_score,
+        report_score
+        )
+        VALUES (#{seminarScore.seminar.id},
+        #{seminarScore.team.id},
+        #{seminarScore.totalScore},
+        #{seminarScore.presentationScore},
+        #{seminarScore.questionScore},
+        #{seminarScore.reportScore}
+        );
+    </insert>
+    <update id="updateTeacherByTeacherId">
+        UPDATE seminar_score
+        <set>
+            <if test="seminarScore.presentationScore!=null">
+                presentaton_score=#{seminarScore.presentaionScore},
+            </if >
+            <if test="seminarScore.presentationScore!=null">
+                question_score=#{seminarScore.questionScore},
+            </if>
+            <if test="seminarScore.presentationScore!=null">
+                report_score=#{seminarScore.reportScore}
+            </if>
+        </set>
+        WHERE klass_seminar_id= #{seminarScore.seminar.id},
+        AND team_id = #{seminarScore.team.id}
+    </update>
+
+     
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace用来指定该xml文件对应的interface  -->
+<!-- 默认idea对于该xml文件是几乎没有任何提示的，需要装一个叫 mybatis free plugins 的插件 -->
+<mapper namespace="com.bkg.coursemanager.mapper.ClassSeminarMapper">
+    <!-- id 就是方法名称 -->
+    <!-- resultType 指定返回的类型，如果返回多个，一样只要指定这个类型,mybatis会自动生成一个list-->
+    <!-- #{xxx}是参数的名称，参数会被填到这个位置 -->
+    <resultMap id="ResultClassSeminar" type="com.bkg.coursemanager.entity.ClassSeminar">
+        <id property="id" column="id" />
+        <result property="reportDDL" column="report_dll"/>
+        <result property="status" column="status"/>
+        <association property="class1" column="klass_id" select="com.bkg.coursemanager.mapper.ClassMapper.selectClassByClassId"/>
+        <association property="seminar" column="seminar_id" select="com.bkg.coursemanager.mapper.SeminarMapper.searchSeminarById"/>
+    </resultMap>
+	
+	<resultMap id="ClassSeminar" type="com.bkg.coursemanager.entity.ClassSeminar">
+        <result property="id" column="id" />
+        <result property="reportDDL" column="report_dll"/>
+        <result property="status" column="status"/>
+        <result property="class1.id" column="klass_id"/>
+        <association property="seminar" column="seminar_id" 
+			select="com.bkg.coursemanager.mapper.SeminarMapper.searchSeminarById"/>
+    </resultMap>
+
+    <select id="listAttendance" resultMap="ResultClassSeminar">
+        <!--waiting for solve-->
+    </select>
+
+    <insert id="insertClassSeminar" keyColumn="id" keyProperty="klass_seminar.id" useGeneratedKeys="true">
+        INSERT INTO klass_seminar(
+        klass_id,
+        seminar_id,
+        report_ddl,
+        status
+        )
+        VALUES (#{classSeminar.class1.id},
+        #{classSeminar.seminar.id},
+        #{classSeminar.reportDDL},
+        #{classSeminar.status}
+        );
+    </insert>
+    <select id="selectClassSeminarById" resultMap="ClassSeminar">
+        SELECT klass_seminar.*
+        FROM klass_seminar
+        WHERE id= #{classSeminarId};
+    </select>
+
+    <select id="selectClassSemianrByForeignKey" resultMap="ResultClassSeminar">
+        SELECT
+        id,
+        klass_id,
+        seminar_id,
+        report_ddl,
+        status
+        FROM klass_seminar
+        WHERE klass_id=#{classId}
+        AND seminar_id=#{seminarId};
+    </select>
+
+
+
+    <update id="updateClassSeminarById">
+        UPDATE teacher
+        SET
+        report_dll=#{classSeminar.reportDDL},
+        status=#{classSeminar.status}
+        WHERE id = #{classSeminarId}
+    </update>
+
+     <update id="updateClassSeminarDDLById">
+        UPDATE teacher
+        SET
+        report_dll=#{classSeminar.reportDDL}
+        WHERE id = #{classSeminarId}
+    </update>
+
+     <update id="updateClassSeminarStatusById">
+        UPDATE teacher
+        SET
+        status=#{classSeminar.status}
+        WHERE id = #{classSeminarId}
+    </update>
+
+    <delete id="deleteClassSeminarById" parameterType="java.math.BigInteger">
+        delete from attendance
+        where id=#{classSeminarId}
+    </delete>
+
+ 
+
+</mapper>

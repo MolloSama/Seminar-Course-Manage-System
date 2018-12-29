@@ -1,0 +1,46 @@
+@charset "UTF-8";
+#top2 {
+	position: absolute;
+	left: 40%;
+	font-size: 2em;
+	padding-top: 0.4em;
+}
+
+.ShareBusiness {
+	margin: 0.3em 0;
+	padding: 0.3em 0.6em;
+	background: white;
+	font-size: 1.5em;
+}
+
+.img1 {
+	height: 1.2em;
+	width: 1.2em;
+}
+
+.agree {
+	font-size: 1.3em;
+	font-weight: bold;
+	color: rgb(60, 200, 80);
+	margin-left: 30%;
+}
+
+.reject {
+	font-size: 1.3em;
+	font-weight: bold;
+	color: red;
+	margin: 0 15%;
+}
+
+.mess {
+	font-size: 1.4em;
+	text-align: center;
+	margin: 0.1em 0 0.4em 0;
+}
+
+.option {
+	background: white;
+	margin: 0 0 1em 0;
+	padding: 0.5em;
+	display: none;
+}

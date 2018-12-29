@@ -1,0 +1,86 @@
+@charset "UTF-8";
+#top2 {
+	position: absolute;
+	left: 30%;
+	font-size: 1.8em;
+	padding-top: 0.5em;
+}
+
+button {
+	width: 100%;
+	font-size: 2em;
+	font-weight: bold;
+	border: none;
+	vertical-align: middle;
+	padding: 1.6% 0;
+}
+
+.seminarClass {
+	float: right;
+	margin-right: 5%;
+	font-size: 2em;
+}
+
+.mess1 {
+	font-size: 1.6em;
+	margin: 0;
+	padding: 0.3em 1em;
+	background: white;
+}
+
+.mess2 {
+	font-size: 1.6em;
+	margin: 0;
+	padding: 0.3em 1em;
+}
+
+.mess5 {
+	font-size: 1.6em;
+	margin: 0;
+	padding: 0.3em 1em;
+}
+
+#topic {
+	margin-left: 20%;
+}
+
+#order {
+	margin-left: 20%;
+}
+
+#Look {
+	position: absolute;
+	left: 80%;
+	margin-top: 4%;
+	font-size: 0.7em;
+}
+
+#intro {
+	font-size: 0.8em;
+	border: none;
+	width: 75%;
+	vertical-align: top;
+	background: rgb(243, 243, 243);
+}
+
+.but1 {
+	margin-bottom: 4%;
+	color: white;
+	background: rgb(20, 255, 70);
+}
+
+.but2 {
+	color: rgb(20, 255, 70);
+	background: white;
+}
+
+.bottom {
+	text-align: center;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+#p1{
+font-size:1.3em;
+margin:0.2em 1em;
+}

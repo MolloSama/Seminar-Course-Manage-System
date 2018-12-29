@@ -1,0 +1,51 @@
+@charset "UTF-8";
+*{ 
+	font-family:"微软雅黑";
+}
+html, body {
+	background: rgb(243, 243, 243);
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 4.2em;
+}
+
+#top3 {
+	position: absolute;
+	left: 87%;
+	font-size: 2.3em;;
+	padding-top: 2%;
+}
+
+#top1{
+	position:absolute;
+	left:4%;
+	font-size:2.3em;
+	padding-top: 2%; 
+}
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 14%;
+	background: white;
+	box-shadow: -0.1em 0.2em 0.8em 0 rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 1.2em;
+	font-family: Microsoft YaHei;
+	padding: 0.4em 0.7em;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+#second_section{
+	margin-top:3%;
+}

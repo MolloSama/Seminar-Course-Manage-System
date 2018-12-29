@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bkg.coursemanager.mapper.RequestMapper" >
+    <resultMap id="TeamShareRequest" type="com.bkg.coursemanager.entity.TeamShareRequest" >
+        <result column="id" property="id" />
+        <result column="status" property="status" />
+        <result column="main_course_id" property="mainCourse.id" />
+        <result column="sub_course_id" property="subCourse.id" />
+        <result column="sub_course_teacher_id" property="subCourse.teacher.id" />
+    </resultMap>
+
+    <resultMap id="SeminarShareRequest" type="com.bkg.coursemanager.entity.SeminarShareRequest" >
+        <result column="id" property="id" />
+        <result column="status" property="status" />
+        <result column="main_course_id" property="mainCourse.id" />
+        <result column="sub_course_id" property="subCourse.id" />
+        <result column="sub_course_teacher_id" property="subCourse.teacher.id" />
+    </resultMap>
+    
+    <select id="getTeamShareRequestById" resultMap="TeamShareRequest">
+            select share_team_application.* from share_team_application 
+            where id= #{id}
+    </select>
+    
+    <select id="getSeminarShareRequestById" resultMap="SeminarShareRequest">
+            select share_seminar_application.* from share_seminar_application 
+            where id= #{id}
+    </select>
+    
+    <update id="updateTeamShareRequestStatusById" parameterType="com.bkg.coursemanager.entity.TeamShareRequest">
+    		update share_team_application
+    		set status= #{status}
+    		where id= #{id}
+    </update>
+    
+    <update id="updateSeminarShareRequestStatusById" parameterType="com.bkg.coursemanager.entity.SeminarShareRequest">
+    		update share_seminar_application
+    		set status= #{status}
+    		where id= #{id}
+    </update>
+</mapper>

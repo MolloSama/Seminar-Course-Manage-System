@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace用来指定该xml文件对应的interface  -->
+<!-- 默认idea对于该xml文件是几乎没有任何提示的，需要装一个叫 mybatis free plugins 的插件 -->
+<mapper namespace="com.bkg.coursemanager.mapper.AttendanceMapper">
+    <!-- id 就是方法名称 -->
+    <!-- resultType 指定返回的类型，如果返回多个，一样只要指定这个类型,mybatis会自动生成一个list-->
+    <!-- #{xxx}是参数的名称，参数会被填到这个位置 -->
+    <resultMap id="ResultAttendance" type="com.bkg.coursemanager.entity.Attendance">
+        <id property="id" column="id" />
+        <result property="teamOrder" column="team_order"/>
+        <result property="presented" column="is_present"/>
+        <result property="reportName" column="report_name"/>
+        <result property="reportUrl" column="report_url"/>
+        <result property="pptName" column="ppt_name"/>
+        <result property="pptUrl" column="ppt_url"/>
+        <association property="classSeminar" column="klass_seminar_id" select="com.bkg.coursemanager.mapper.ClassSeminarMapper.selectClassSeminarById"/>
+        <association property="team" column="team_id" select="com.bkg.coursemanager.mapper.TeamMapper.getTeamByTeamId"/>
+    </resultMap>
+    <select id="listAttendance" resultMap="ResultAttendance">
+        <!--waiting for solve-->
+    </select>
+    <select id="selectAttendanceByAttendanceId" resultMap="ResultAttendance">
+        SELECT
+        id,
+        klass_seminar_id,
+        team_id,
+        team_Order,
+        is_present,
+        report_name,
+        report_url,
+        ppt_name,
+        ppt_url
+        FROM attendance
+        WHERE id=#{attendanceId};
+    </select>
+
+    <insert id="insertAttendance" keyColumn="id" keyProperty="attendance.id" useGeneratedKeys="true">
+        INSERT INTO attendance(
+        klass_seminar_id,
+        team_id,
+        team_Order,
+        is_present,
+        report_name,
+        report_url,
+        ppt_name,
+        ppt_url
+        )
+        VALUES (#{attendance.classSeminar.id},
+        #{attendance.team.id},
+        #{attendance.teamOrder},
+        #{attendance.presented},
+        #{attendance.reportName},
+        #{attendance.reportUrl},
+        #{attendance.pptName},
+        #{attendance.pptUrl}
+        );
+    </insert>
+
+
+
+    <update id="updateReportByAttendanceId">
+        UPDATE attendance
+        SET 
+        report_name=#{attendance.reportName},
+        report_url=#{attendance.reportUrl}
+        WHERE id=#{attendanceId}
+    </update>
+
+    <update id="updatePPTByAttendanceId">
+        UPDATE attendance
+        SET 
+        ppt_name=#{attendance.pptName},
+        ppt_url=#{attendance.pptUrl}
+        WHERE id=#{attendanceId}
+    </update>
+
+    <update id="updateTeamOrderByAttendanceId">
+        UPDATE attendance
+        SET 
+        report_name=#{attendance.reportName},
+        report_url=#{attendance.reportUrl}
+        WHERE id=#{attendanceId}
+    </update>
+ 
+
+    <delete id="deleteAttendanceByAttendanceId" parameterType="java.math.BigInteger">
+        DELETE FROM attendance
+        WHERE id=#{attendanceId}
+    </delete>
+    
+    <select id="selectAttendanceByTeamIdAndClassSeminarId" resultMap="ResultAttendance">
+        SELECT attendance.*
+        FROM attendance
+        WHERE team_id=#{teamId} AND klass_seminar_id=#{classSeminarId};
+    </select>
+ 	
+ 	<select id="selectAttendanceByClassSeminarId" resultMap="ResultAttendance">
+        SELECT attendance.*
+        FROM attendance
+        WHERE klass_seminar_id=#{classSeminarId};
+    </select>
+
+</mapper>

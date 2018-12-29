@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+p {
+	font-size: 1.6em;
+	margin: 0;
+	padding: 0.25em;
+	background: white;
+}
+
+ul {
+	border-bottom: 0.08em solid;
+	display: none;
+}
+
+li {
+	font-size: 1.1em;
+	text-align: center;
+	border-bottom: 0.06em solid;
+	list-style: none;
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;
+}

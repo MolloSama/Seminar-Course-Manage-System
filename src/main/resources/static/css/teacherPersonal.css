@@ -1,0 +1,60 @@
+@charset "UTF-8";
+.com {
+	padding: 5% 2%;
+	font-size: 1.3em;
+	margin: 0;
+}
+
+.b {
+	position: absolute;
+	left: 45%;
+}
+.email{
+	padding: 5% 2% 2% 2%;
+	font-size: 1em;
+	background:white;
+	margin: 0;
+}
+#email {
+	margin: 0;
+}
+
+#change1 {
+	background: white;
+	font-size: 0.8em;
+	text-align: right; 
+	padding: 0 3%;
+	margin:0;
+	color: green;
+}
+
+#password {
+	padding: 5% 0 0 2%;
+	font-size: 1.3em;
+	margin: 0;
+}
+
+#change2 {
+	font-size: 0.8em;
+	text-align: right;
+	padding: 1% 2% 0 0;
+	margin: 0 3%;
+	color: green;
+}
+#interval{
+	font-size: 1.1em; 
+	padding: 1% 2.5%;
+}
+
+#logeout {
+	width: 99%;
+	font-size: 1.6em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: white;
+	background: red;
+	border: 0.02em solid;
+	padding: 1.6% 0;
+	margin-top: 1.5em;
+	border-radius: 26px;
+}

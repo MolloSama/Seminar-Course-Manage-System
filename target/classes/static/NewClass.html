@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		localStorage.setItem("courseId",1);
+		$("#sure").click(function() {
+			var storage=window.localStorage;
+			var courseId=storage.getItem("courseId");
+		    $.ajax({
+		        type: "POST",
+		        url: '/course/'+courseId+'/class',
+		        contentType: "application/json; charset=utf-8",
+		        data: JSON.stringify(GetJsonData(courseId)),
+		        dataType: "json",
+		        async: false,
+		        success: function (message) {
+					alert(message['status']);
+		        },
+		        error: function (message) {
+		            alert("新建课程失败！");
+		        }
+		    });
+		});
+
+		function GetJsonData(courseId) {
+		    var json = {
+		    	"course":
+		    		{
+		    			'id':courseId
+		    		},
+		        "time": $("#classTime").val(),
+		        "classroom": $("#classRoom").val(),
+		        "grade": $("#classGrade").val(),
+		        "serial": $("#classSerial").val()
+		    };
+		    alert(JSON.stringify(json));
+		    return json;
+		}
+		$("#sure").click(function() {
+			window.location.href = "ClassMessage.html";
+		});
+		$("#a2").click(function() {
+			window.location.href = "teacher_main.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#top1").click(function() {
+			window.history.back();
+		});
+	});
+</script>
+<style>
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top1 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top2 {
+	position: absolute;
+	left: 34%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+.ele {
+	max-height: 3.4em;
+	font-family: Microsoft YaHei;
+	margin: 4% 0 4% 5%;
+	display: block;
+	padding-bottom: 5%;
+	margin-bottom: 7%;
+}
+
+label {
+	font-size: 3.35em;
+	float: left;
+	padding-top: 0.5em;
+	vertical-align: middle;
+}
+
+input {
+	width: 40%;
+	font-size: 3.2em;
+	float: right;
+	margin-right: 17%;
+	border: 0.15em groove;
+	vertical-align: middle;
+}
+
+.button1 {
+	width: 34%;
+	font-size: 3.2em;
+	float: right;
+	margin-right: 18%;
+	border: 0.15em outset;
+	background: rgb(247, 247, 247);
+	vertical-align: middle;
+}
+
+.button2 {
+	width: 84%;
+	font-size: 4.6em;
+	font-family: Microsoft YaHei;
+	border: 0.02em solid;
+	background: rgb(20, 255, 70);
+	vertical-align: middle;
+	padding: 1.6% 0;
+	border-radius: 26px;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">新建班级</label>
+	</div>
+	<div id="second_section"
+		style="background: white; padding: 5% 0; margin-top: 3%; display: block;">
+		<div class="ele">
+			<label>年级：</label><input id="classGrade" type="text" />
+		</div>
+		<div class="ele">
+			<label>班级序号：</label><input id="classSerial" type="text" />
+		</div>
+		<div class="ele">
+			<label>讨论课时间：</label><input id="classTime" type="text" />
+		</div>
+		<div class="ele">
+			<label>讨论课地点：</label><input id="classRoom" type="text" />
+		</div>
+		<div class="ele">
+			<label>班级学生名单：</label>
+			<button class="button1">选择文件</button>
+		</div>
+		<div style="text-align: center; margin: 20% 0 5% 0;">
+			<button class="button2" id="sure">确定</button>
+		</div>
+	</div>
+</body>
+</html>

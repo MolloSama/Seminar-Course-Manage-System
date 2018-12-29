@@ -1,0 +1,27 @@
+@charset "UTF-8";
+#top2 {
+	position: absolute;
+	left: 34%;
+	font-size: 2em;;
+	padding-top: 4%;
+	padding-bottom: 40px;
+}
+
+.img1 {
+	width: 1.2em;
+	height: 1.2em;
+	vertical-align: bottom;
+	margin: 0 0.6em 0 0.3em;
+}
+
+.Course {
+	font-size: 1.3em;
+	background: white;
+	padding: 0.4em 0.3em;
+	margin: 0.3em 0;
+}
+
+.ClassNo {
+	margin-left: 0.7em;
+	font-size: 0.9em;
+}

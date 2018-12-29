@@ -1,0 +1,55 @@
+@charset "UTF-8";
+#top2 {
+	position: absolute;
+	left: 33%;
+	font-size: 1.8em;
+	padding-top: 4%;
+}
+
+.mess1 {
+	font-size: 1.3em;
+	background: white;
+	padding: 0.3em;
+	margin: 0.5em 0 0.1em 0;
+	color: #00CACA;
+}
+
+.mess2 {
+	margin: 0;
+	padding: 0.3em 3em;
+	font-size:1em;
+}
+
+.mess3 {
+	margin: 0;
+	background: white;
+	font-size: 0.8em;
+	color: rgb(150, 150, 150);
+	padding: 0.2em;
+}
+
+.mess4 {
+	margin: 0;
+	background: white;
+	font-size: 1em; 
+	padding: 0.2em;
+}
+.mess5{
+text-align:center;
+font-size: 1em; 
+padding:0.2em;
+margin: 0;
+}
+#div1_1,#div2_1{
+	background: white;
+} 
+#div3_1 {
+	background: white;
+	padding-bottom:1em;
+} 
+.CourseName1 {
+	padding-right: 0.6em;
+}
+.CourseName3{
+padding-right: 0.6em;
+}

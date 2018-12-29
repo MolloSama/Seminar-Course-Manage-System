@@ -1,0 +1,51 @@
+#top2 {
+	position: absolute;
+	left: 30%;
+	font-size: 2em;
+	padding-top: 4%;
+}
+
+.courseName {
+	font-size: 1.5em; 
+	margin: 0;
+	padding: 0.2em 0.5em;
+	background: white;
+}
+
+.ele {
+	font-size: 1.2em;
+	background: white;
+	margin: 1% 0;
+	padding: 0.1em 1em;
+}
+.mess1 {
+	color: rgb(60, 200, 80);
+	margin-right: 8%;
+}
+.mess2{
+background: white; 
+display: block;
+margin-top:0.2em; 
+}
+ #NewShare{
+	background: rgb(60, 200, 80);
+	font-size: 1.6em;
+	text-align: center; 
+	border-radius: 0.5em;
+	width: 100%;
+	color:white;
+}
+.cancle {
+    font-size:1em;
+	margin: 2% 0 2% 63%; 
+	padding: 0.3em 1em;
+	border:0.05em solid;
+	border-color: red; 
+	background-color:white;
+}
+#bottomSection{
+text-align: center; 
+position: fixed; 
+bottom: 0%; 
+width: 100%;
+}

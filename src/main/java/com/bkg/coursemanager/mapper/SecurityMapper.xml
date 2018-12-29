@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bkg.coursemanager.mapper.SecurityMapper" >
+    <resultMap id="account" type="com.bkg.coursemanager.entity.Account" >
+        <result column="accountID" property="username" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="status" property="status" />
+        <result column="timeInterval" property="timeInterval" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="role" property="role" />
+    </resultMap>
+    
+    <resultMap id="resource" type="com.bkg.coursemanager.entity.Resource" >
+        <result column="resourceID" property="resourceID" />
+        <result column="resourceName" property="resourceName" />
+        <result column="url" property="url" />
+    </resultMap>
+    
+    <select id="getUserByUsername" resultMap="account" parameterType="java.lang.String">
+            select accountID,password,email,status,timeInterval,code,name,role from account
+            where accountID= #{username,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="getResourceByUsername" resultMap="resource" parameterType="java.lang.String">
+            select resource.resourceID,resource.resourceName,resource.url from account,role_resource,resource
+            where role_resource.role=account.role AND resource.resourceID=role_resource.resourceID AND account.accountID= #{username,jdbcType=VARCHAR}  
+    </select>
+    
+    <select id="getAllResource" resultMap="resource" >
+            select * from resource
+    </select>
+    
+</mapper>

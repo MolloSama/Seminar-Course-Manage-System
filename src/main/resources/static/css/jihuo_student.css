@@ -1,0 +1,64 @@
+@charset "UTF-8";
+#top2 {
+	position: absolute;
+	left: 33%;
+	font-size: 2.2em;
+	padding-top: 4%;
+}
+#second_section{
+	margin-top: 8%;
+}
+
+.pass {
+	width: 100%;
+	border: 0;
+	margin-top: 0.5em;
+	background: white;
+	font-size: 1.7em;
+	padding: 0.2em;
+	outline: none;
+}
+
+#yan {
+	width: 50%;
+	border: 0;
+	margin-top: 0.5em;
+	padding-left: 3%;
+	background: white;
+	font-size: 1.7em;
+	padding: 0.2em;
+	outline: none;
+}
+
+#sent {
+	font-size: 1.3em;
+	padding: 0.3em 0.6em;
+	border: 0.03em solid;
+	border-color: red;
+	background: white;
+	float: right;
+	margin-top: 0.75em;
+}
+
+#sure {
+	width: 100%;
+	font-weight: bold;
+	background-color: rgb(60, 200, 80);
+	font-size: 1.7em;
+	border: none;
+	color: white;
+	font-weight: bold;
+}
+
+#mess1 {
+	font-size: 0.9em;
+	padding-left: 2%;
+	margin: 2.5% 0;
+}
+
+#mess2 {
+	font-size: 0.8em;
+	text-align: left;
+	padding-left: 2%;
+	margin-top: 25%;
+}

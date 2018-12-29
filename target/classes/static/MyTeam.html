@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NewTeam.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link type="text/css" rel="stylesheet" href="./css/MyTeam.css">
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script src="../js/HeadStudent.js"></script>
+<script>
+$(document).ready(function(){ 
+	var w=$("#HeadMan").width()+"px"; 
+	var $ident=$(".identity"); 
+	$ident.css("margin-left",w);
+	var $To=$(".identity").get(0);
+	$($To).text("组员："); 
+	$($To).css("margin-left",0);
+	//var userId=localStorage.getItem('userId');
+	localStorage.setItem('courseId',1);
+	localStorage.setItem('userId',1);
+	var courseId=localStorage.getItem('courseId');
+	var myTeamStatus;
+	var teamId;
+	var teamStatus;
+	$.ajax({
+        type: "GET",
+        url: '/course/'+courseId+'/myTeamStatus',
+        //data: "data",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+        	
+        	myTeamStatus=data['status'];
+        },
+        error: function() {
+            alert("获取组队信息失败！");
+          }
+        });
+	if(myTeamStatus=="noTeam")
+	{
+		alert(myTeamStatus);
+		window.location.href = "Team_Student.html";
+	}
+	$.ajax({
+        type: "GET",
+        url: '/course/'+courseId+'/myTeam',
+        //data: "data",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+        	teamId=data['id'];
+        	teamStatus=data['status'];
+        	var teamLeader=data['leader'];
+        	var teamName=data['name'];
+        	var leaderId=teamLeader['id'];
+        	var leaderName=teamLeader['name'];
+        	var leaderAccount=teamLeader['account'];
+        	localStorage.setItem("teamStatus",teamStatus);
+        	if(teamStatus==1)
+        		$("#teamStatus").text("valid"); 
+        	if(teamStatus==0)
+        		$("#teamStatus").text("invalid");
+        	if(teamStatus==2)
+        		$("#teamStatus").text("inaudit");
+        	$("#TeamName").text(teamName);
+        	$("#leaderAccount").text(leaderAccount);
+        	$("#leaderName").text(leaderName);
+        	//alert('success!');
+        	$.ajax({
+                type: "GET",
+                url: '/team/'+teamId+'/course/'+courseId+'/leader/'+leaderId,
+                //data: "data",
+                dataType: "json",
+                async: false,
+                success: function(members) {
+                	//alert('success!');
+            		for(var j=0;j<members.length;j++)
+        			{
+            			var memberAccount=members[j]['account'];
+        				var memberName=members[j]['name'];
+        				var memberId=members[j]['id'];
+        				memberHtml=
+        					'<p id="'+memberId+'"class="member" studentName="'+memberName+'" studentAccount="'+memberAccount+'" onclick=deleteMember('+memberId+','+teamId+')> '+
+        					'<span class="identity">组员:  </span><span class="MemberID">'+memberAccount+'</span> '+
+        					'<span class="MemberName">'+memberName+'</span> '+
+        					'</p> ';
+        				$("#members").append(memberHtml);
+        			}
+                },
+                error: function() {
+                    alert("获取队员信息失败！");
+                  }
+                });
+        },
+        error: function() {
+            alert("获取我的队伍失败！");
+          }
+        });
+	
+    $.ajax({
+        type: "GET",
+        url: '/course/'+courseId+'/noTeam',
+        //data: "data",
+        dataType: "json",
+        async: false,
+        success: function(data) {
+          for (var i=0;i<data.length;i++) {
+            var studentId = data[i]['id'];
+            var studentAccount = data[i]['account'];
+            var studentName = data[i]['name'];
+			html=
+				'<p class="student" id="'+studentId+'"> '+
+					'<input name="student" class="student" type="checkbox" id="'+studentId+'" studentName="'+studentName+'" studentAccount="'+studentAccount+'"/> <span class="StudentID">'+studentAccount+'</span><span '+
+					'class="studentName">'+studentName+'</span> '+
+				'</p> ';
+        	$("#noTeamStudents").append(html);          
+          }
+         // showStudentWithoutTeam(); 
+        },
+        error: function() {
+          alert("获取未组队学生信息失败！");
+        }
+    });
+    if(myTeamStatus=="haveTeam")
+    	{
+		buttomHtml=
+			'<button id="freeTeam" onclick=outTeam('+teamId+')>退出队伍</button> ';
+		$("#teamLeader").append(buttomHtml);
+    	}
+	if(myTeamStatus=="teamLeader")
+		{
+			if(teamStatus==2)
+				{
+				buttomHtml=
+					'<button id="freeTeam">解散小组</button> '+
+					'<button id="sub">审核中</button> ';
+				}
+			if(teamStatus==0)
+				{
+				buttomHtml=			
+					'<button id="freeTeam" onclick=freeTeam('+teamId+')>解散小组</button> '+
+					'<button id="addMember" onclick=addMembers('+teamId+')>添加</button> '+
+					'<button id="sub" onclick=subApplication('+teamId+')>提交审核</button> ';
+				}
+			if(teamStatus==1)
+				{
+				buttomHtml=			
+					'<button id="freeTeam">解散小组</button> '+
+					'<button id="addMember" onclick=addMembers('+teamId+')>添加</button> '+
+					'<button id="sub" onclick=subApplication('+teamId+')>提交审核</button> ';
+				}
+			$("#teamLeader").append(buttomHtml);
+			searchHtml=
+				'<p class="BottomP"> '+
+				'<label id="FindMess">搜索学生：</label><input type="text" id="FindInput" /> '+
+				'<button id="search" onclick=search()>搜索</button> '+
+				'</p> ';
+			$("#searchButtom").append(searchHtml);
+			
+		}
+
+	$(".mess1").click(function() {
+		$("#noTeamStudents").slideToggle("slow");
+	});
+
+});
+
+function outTeam(teamId)
+{
+	var userId=localStorage.getItem("userId");
+	alert("teamId:"+teamId+"userId:"+userId);
+	var json=
+		{
+			"memberId":userId
+		}
+	$.ajax({
+		type: "PUT",
+		url: '/team/'+teamId+'/remove',
+		contentType: "application/json; charset=utf-8",
+		data: JSON.stringify(json),
+		dataType: "json",
+		async: false,
+		success: function (message) {
+        	alert(message['status']);
+        	window.location.href = "Team_Student.html";
+		},
+		error: function (message) {
+			alert("删除组员失败！");
+		}
+	});
+}
+
+function freeTeam(teamId)
+{
+	 $.ajax({
+	        type: "DELETE",
+	        url: '/team/'+teamId,
+	        //data: "data",
+	        dataType: "json",
+	        async: false,
+	        success: function(data) {
+	        	alert(data['status']);
+	        	window.location.href = "Team_Student.html";
+	        },
+	        error: function() {
+	            alert("获取未组队学生信息失败！");
+	        }
+	 });
+}
+function search()
+{
+	var txt=$("#FindInput").val();
+	alert(txt);
+	var students=document.getElementsByName("student");
+	for(var i=0;i<students.length;i++){
+		var studentName=students[i].getAttribute("studentName");
+		var studentAccount=students[i].getAttribute("studentAccount");
+		var studentId=students[i].getAttribute("id");
+		//alert("studentName"+studentName+"studentAccount:"+studentAccount);
+		if(studentName==txt||studentAccount==txt)
+		{
+        	$('[class="student"][id="'+studentId+'"]').remove(); 
+			//lert("查找成功!");
+			html=
+				'<p class="student" id="'+studentId+'"> '+
+					'<input name="student" type="checkbox" id="'+studentId+'" studentName="'+studentName+'" studentAccount="'+studentAccount+'"/> <span class="StudentID">'+studentAccount+'</span><span '+
+					'class="studentName">'+studentName+'</span> '+
+				'</p> ';
+        	$("#searchStudent").append(html); 
+        	//alert("添加成功！");
+        	break;
+		}	
+	}
+}
+function deleteMember(memberId,teamId)
+{
+	localStorage.setItem("teamId",teamId);
+	localStorage.setItem("memberId",memberId);
+	$("#confirm2").show();
+}
+
+function subApplication(teamId)
+{
+	 localStorage.setItem("teamId",teamId);
+	 $("#confirm").show();
+}
+
+function subConfirm2()
+{
+	var teamId=localStorage.getItem("teamId");
+	var memberId=localStorage.getItem("memberId");
+	var json=
+		{
+			"memberId":memberId
+		}
+	$.ajax({
+		type: "PUT",
+		url: '/team/'+teamId+'/remove',
+		contentType: "application/json; charset=utf-8",
+		data: JSON.stringify(json),
+		dataType: "json",
+		async: false,
+		success: function (message) {
+			var stuName=$('[id="'+memberId+'"][class="member"]').attr("studentName");
+			var stuAccount=$('[id="'+memberId+'"][class="member"]').attr("studentAccount");
+			$("#confirm2").hide();
+			html=
+				'<p class="student" id="'+memberId+'"> '+
+					'<input name="student" class="student" type="checkbox" id="'+memberId+'" studentName="'+stuName+'" studentAccount="'+stuAccount+'"/> <span class="StudentID">'+stuAccount+'</span><span '+
+					'class="studentName">'+stuName+'</span> '+
+				'</p> ';
+        	$("#noTeamStudents").append(html); 
+        	$('[id="'+memberId+'"][class="member"]').remove();
+        	alert(message['status']);
+		},
+		error: function (message) {
+			alert("删除组员失败！");
+		}
+	});
+}
+
+function subConfirm()
+{
+	 var teamId=localStorage.getItem("teamId");
+	 var courseId=localStorage.getItem("courseId");
+	 var teacherId;
+	 var reason=$("#reas").val();
+	 $.ajax({
+	        type: "GET",
+	        url: '/course/'+courseId,
+	        //data: "data",
+	        dataType: "json",
+	        async: false,
+	        success: function(data) {
+	        	teacherId=data['teacher']['id'];
+	        },
+	        error: function() {
+	            alert("获取未组队学生信息失败！");
+	        }
+	 });
+	 //alert("fuck");
+	var request=
+		{
+			"team":{
+				"id":teamId,
+				"course":{
+					"teacher":{
+						"id":teacherId
+					}
+					}
+				},		
+			"reason":reason
+		}
+	alert(JSON.stringify(request));
+	$.ajax({
+		type: "POST",
+		url: '/team/'+teamId+'/teamValidRequest',
+		contentType: "application/json; charset=utf-8",
+		data: JSON.stringify(request),
+		dataType: "json",
+		async: false,
+		success: function (message) {
+			alert(message['status']);
+			var json=
+			{
+				"id":teamId,
+				"status":2
+			}
+			$.ajax({
+				type: "PUT",
+				url: '/team/'+teamId,
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify(json),
+				dataType: "json",
+				async: false,
+				success: function (message) {
+					alert(message['status']);
+					$("#sub").text("审核中");
+					$("#sub").unbind();
+					$("#confirm").remove();
+					$("#addMember").remove();
+					$("#teamStatus").text("inaudit");
+				},
+				error: function (message) {
+					alert("更改组队信息失败！");
+				}
+			});
+			$("#confirm").hide();
+		},
+		error: function (message) {
+			alert("提交审核失败！");
+		}
+	});
+}
+
+function subCancel()
+{
+	$("#confirm").hide();
+}
+
+
+function addMembers(teamId)
+{
+	//alert("teamId:"+teamId+"!!!!!!");
+	var students=document.getElementsByName("student");
+	courseId=localStorage.getItem('courseId');
+	//alert("courseId:"+courseId);
+	//alert("leaderId:"+userId+" classId:"+classId+" courseId:"+courseId);
+	var membersNum=0;
+	var members=[];
+	for(var i=0;i<students.length;i++){
+		if(students[i].checked)
+			{
+			//alert(students[i].getAttribute("id"));
+				var student=
+				{
+					"memberId":students[i].getAttribute("id")
+				};
+				members.push(student);	
+				membersNum++;
+				memberHtml=
+					'<p studentAccount="'+students[i].getAttribute("studentAccount")+'" studentName="'+students[i].getAttribute("studentName")+'" id="'+students[i].getAttribute("id")+'" class="member" onclick=deleteMember('+students[i].getAttribute("id")+','+teamId+')> '+
+					'<span class="identity">组员:  </span><span class="MemberID">'+students[i].getAttribute("studentAccount")+'</span> '+
+					'<span class="MemberName">'+students[i].getAttribute("studentName")+'</span> '+
+					'</p> ';
+				$("#members").append(memberHtml);
+				$('[id="'+students[i].getAttribute("id")+'"][class="student"]').remove();
+			}
+	}
+	//alert(JSON.stringify(members));
+
+	$.ajax({
+		type: "PUT",
+		url: '/team/'+teamId+'/add',
+		contentType: "application/json; charset=utf-8",
+		data: JSON.stringify(members),
+		dataType: "json",
+		success: function (message) {
+			alert(message['status']);
+		},
+		error: function (message) {
+			alert("添加组员失败！");
+		}
+	});
+	var teamStatus=localStorage.getItem("teamStatus");
+
+	if(teamStatus==1&&membersNum!=0)
+		{
+		var json=
+		{
+			"id":teamId,
+			"status":0
+		}
+		$.ajax({
+			type: "PUT",
+			url: '/team/'+teamId,
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify(json),
+			dataType: "json",
+			success: function (message) {
+				alert(message['status']);
+				$("#teamStatus").text("invalid");
+			},
+			error: function (message) {
+				alert("更改组队信息失败！");
+			}
+		});
+		
+		}
+}
+
+</script>
+
+<link type="text/css" rel="stylesheet" href="./css/Head.css">
+<link type="text/css" rel="stylesheet" href="./css/MyTeam.css">
+
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label> <label id="top2">我的小组</label>
+	</div>
+	<div id="SecondSection">
+		<p id="p1">
+		<span id="TeamName"></span>
+			<span id="teamStatus"></span>
+		</p>
+		<div id="TeamMember">
+			<p id="TeamHead" class="member">
+				<span id="HeadMan">组长：</span><span id="leaderAccount"
+					class="MemberID"></span> <span id="leaderName" class="MemberName"></span>
+			</p>
+			<div id="members">
+				<!--  
+			<p class="member">
+				<span class="identity">zuyuan </span><span class="MemberID">12345678901234</span>
+				<span class="MemberName">JONE</span>
+			</p>
+			-->
+			</div>
+		</div>
+		<p class="mess1">
+			<span>添加成员：</span>
+		</p>
+		<div id="noTeamStudents" style="display: none;">
+			<!-- 
+		<div id="students">
+			<p class="student">
+				<input name="student" type="checkbox" /> <span class="StudentID">24320162200005</span><span
+					class="studentName">王六</span>
+			</p>
+		</div>
+		 -->
+		</div>
+		<div id="searchStudent"></div>
+		<div id="bottomSection">
+			<div id="searchButtom">
+				<!--  
+			<p class="BottomP">
+				<label id="FindMess">搜索学生：</label><input type="text" id="FindInput" />
+				<button id="search" onclick=search()>搜索</button>
+			</p>
+			-->
+			</div>
+			<p id="teamLeader" class="BottomP">
+				<!--  
+				<button id="freeTeam">解散小组</button>
+				<button id="addMember">添加</button>
+				<button id="sub">提交审核</button>
+				-->
+			</p>
+		</div>
+	</div>
+	<div id="confirm">
+		<p>申请理由：</p>
+		<p>
+			<input id="reas" />
+		</p>
+		<p>
+			<button class="butn1" id="yes" onclick=subConfirm()>确认</button>
+			<button class="butn1" id="no" onclick=subCancel()>取消</button>
+		</p>
+	</div>
+	<div id="confirm2">
+		<p>将<span id="deleteMember"></span>移除小组</p> 
+		<p>
+			<button class="butn1" id="yes2" onclick=subConfirm2()>确认</button>
+			<button class="butn1" id="no2" onclick=subCancel2()>取消</button>
+		</p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+#top2 {
+	position: absolute;
+	left: 35%;
+	font-size: 1.8em;
+	padding-top: 0.5em;
+}
+
+.seminar_all {
+	font-size: 1.8em;
+	font-weight: bold;
+	font-family: Microsoft YaHei;
+	color: rgb(60, 200, 80);
+	margin: 2% 0;
+	padding: 0.3em 0;
+	text-align: center;
+	background: white;
+}
+
+.grade_ {
+	border: 0;
+	width: 10%;
+	height: 7%;
+	font-size: 1.3em;
+	background: rgb(243, 243, 243);
+	color: rgb(60, 200, 80);
+}
+
+.change {
+	font-size: 0.9em;
+	border: 0.01em solid;
+	border-color: rgb(60, 200, 80);
+	padding: 0.5% 4%;
+	background: white;
+}
+
+.SeminarAll {
+	margin: 0;
+	display: none;
+}
+
+.seminarName {
+	padding: 0.2em;
+	margin: 0;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+.Seminar {
+	padding-bottom: 0.6em;
+	border-bottom: 0.1em solid rgb(200, 200, 200);
+}
+
+.p2 {
+	padding: 0.2em;
+	margin: 0;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+.mess1 {
+	margin: 0;
+	font-size: 1.4em;
+	padding: 0.1em;
+}
+
+.mess2 {
+	margin: 0;
+	font-size: 1.5em;
+	padding-top: 1%;
+	text-align: center;
+}
+
+.p1 {
+	font-size: 1.5em;
+	margin: 0.2em 0;
+	background: white;
+	padding: 0.4em 1em;
+}
+
+.GradeTotal {
+	margin-left: 50%;
+}
+
+.Team {
+	display: none;
+}

@@ -1,0 +1,24 @@
+#top2 {
+	position: absolute;
+	left: 35%;
+	font-size: 2em;
+	padding-top: 0.4em;
+}
+
+p {
+	font-size: 1.4em;
+	margin: 0.5em 0;
+	padding: 0.3em;
+	background: white;
+}
+
+.book1 {
+	width: 1.3em;
+	height: 1.3em;
+	vertical-align: middle;
+	margin-right: 0.6em;
+}
+.ClassName{
+margin-left:1em;
+font-size:0.8em;
+}

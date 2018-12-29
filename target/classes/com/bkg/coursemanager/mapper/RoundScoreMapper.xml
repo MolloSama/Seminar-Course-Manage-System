@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bkg.coursemanager.mapper.RoundScoreMapper">
+    <resultMap id="RoundScore" type="com.bkg.coursemanager.entity.RoundScore">
+        <id column="id" property="id" />
+        <result column="presentation_score" property="presentationScore" />
+        <result column="report_score" property="reportScore" />
+        <result column="question_score" property="questionScore" />
+        <result column="total_score" property="totalScore" />
+        <result column="team_id" property="team.id" />
+        <association property="classRound" column="round_id"                       
+            select="com.bkg.coursemanager.mapper.ClassRoundMapper.getClassRoundById" />
+    </resultMap>
+
+    <select id="getRoundScoreByClassIdAndTeamId" resultMap="RoundScore">
+        SELECT round_score.* FROM round_score,klass_round
+        WHERE klass_round.klass_id= #{classId}
+        AND round_score.team_id= #{teamId}
+        AND round_score.round_id = klass_round.id;
+    </select>
+</mapper>

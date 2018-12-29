@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+	
+</script>
+<script>
+	$(document).ready(function() {
+		$("#top3").click(function() {
+			$(".dropdown-content").slideToggle("slow");
+		});
+		$("#change1").click(function() {
+			window.location.href = "ChangeEmail.html";
+		});
+		$("#change2").click(function() {
+			window.location.href = "ChangePassword.html";
+		});
+		$("#logeout").click(function() {
+			window.location.href = "../index.html";
+		});
+		$("#a2").click(function() {
+			window.location.href = "StudentMain.html";
+		});
+		$("#a3").click(function() {
+			window.location.href = "SeminarMessage.html";
+		});
+		$("#top1").click(function() {
+			window.history.back();
+		});
+	});
+</script>
+
+<style type="text/css">
+body {
+	background: rgb(243, 243, 243);
+	font-family: Microsoft YaHei;
+}
+
+#top {
+	background: rgb(60, 200, 80);
+	height: 180px;
+}
+
+#top2 {
+	position: absolute;
+	left: 30%;
+	font-size: 90px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#top3 {
+	position: absolute;
+	right: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+#top1 {
+	position: absolute;
+	left: 7%;
+	font-size: 100px;
+	padding-top: 4%;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	right: 1%;
+	top: 11%;
+	background-color: rgb(255, 255, 255);
+	box-shadow: 0px 8px 16px 0px rgb(0, 0, 0);
+	opacity: 1;
+}
+
+.dropdown-content span {
+	color: rgb(60, 200, 80);
+	font-size: 60px;
+	font-family: Microsoft YaHei;
+	padding: 12px 16px;
+	text-decoration: none;
+	text-align: center;
+	display: block;
+}
+
+.com {
+	padding: 5% 2%;
+	font-size: 2.9em;
+	margin: 0;
+}
+
+.b {
+	position: absolute;
+	left: 45%;
+}
+
+#email {
+	padding: 5% 0 0 1%;
+	font-size: 2.8em;
+	margin: 0;
+}
+
+#change1 {
+	font-size: 2.2em;
+	text-align: right;
+	padding: 3.3% 2% 0 0;
+	margin: 0;
+	color: green;
+}
+
+#password {
+	padding: 5% 0 0 2%;
+	font-size: 3.1em;
+	margin: 0;
+}
+
+#change2 {
+	background: white;
+	font-size: 2.2em;
+	text-align: right;
+	padding: 3% 2% 0 0;
+	margin: 0 3%;
+	color: green;
+}
+
+#logeout {
+	width: 99%;
+	font-size: 4.6em;
+	font-family: Microsoft YaHei;
+	font-weight: bold;
+	color: white;
+	background: red;
+	border: 0.02em solid;
+	padding: 1.6% 0;
+	margin-top: 3em;
+	border-radius: 26px;
+}
+</style>
+</head>
+
+<body>
+	<div id=top>
+		<label id="top1">&lt;</label><label id="top2">账户与设置</label> <label
+			id="top3">+</label>
+		<div class="dropdown-content">
+			<span id="a1">待办</span> <span id="a2">个人页</span> <span id="a3">讨论课</span>
+		</div>
+	</div>
+	<div id="second_section" style="margin-top: 4%;">
+		<p style="background: white;" class="com">
+			<span class="a">姓名：</span><span class="b">王二</span>
+		</p>
+		<p class="com">
+			<span class="a">教工号：</span><span class="b">24320162200001</span>
+		</p>
+		<p style="background: white;" class="com">
+			<span class="a">出生年月：</span><span class="b">1998.1</span>
+		</p>
+		<p class="com" id="email">
+			<span class="a">联系方式（邮箱）：</span><span class="b">wang@stu.xmu.edu.cn</span>
+			<p id="change1">修改</p>
+		</p>
+		<p style="background: white;" id="password">
+			<span class="a">账户密码：</span><span class="b">******</span>
+			<p id="change2">修改</p>
+		</p>
+		<p>
+		<button id="logeout">退出登录</button>
+		</p>
+	</div>
+</body>
+</html>
